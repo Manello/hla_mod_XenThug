@@ -1,2 +1,2 @@
-# hla_mod_XenThug
+# [MOD] Half Life: Alyx - XenThug
 A Half Life: Alyx Mod, classic wave defense mode
