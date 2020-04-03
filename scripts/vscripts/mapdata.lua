@@ -23,6 +23,7 @@ _G.MyPolymer = 2
 _G.WaveModifier = 1.0
 
 --Chance for each enemy type to drop Polymer (0.5 = 50%)
+--NOT SUPPORTED YET
 _G.PolymerDropChance = {
 	0.5, 	0.5, 	0.5, 	0.0, 	0.5, 	0.5,
 	0.5, 	0.5, 	0.5, 	0.0, 	0.0, 	0.0,
@@ -38,6 +39,11 @@ _G.PolymerForKillMax = {
 	2, 		2, 		1, 		0, 		0, 		0
 }
 
+--===============================================This table shows the layout of the enmy tables (Careful, some NPCs are broken and can't be used yet!)
+-- Crab		Armor	Poison	???		Runn	Black
+-- Zomb		Jeff	Antlio	???		???		???
+-- Comb		CombS	Manhac	???		???		???
+
 --Defines how many of each enemy type should be in each wave
 _G.WaveList = {
 	
@@ -45,19 +51,19 @@ _G.WaveList = {
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
-	 {7, 	0,		0,		0, 		0, 		0,
+	 {4, 	5,		1,		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		1, 		0, 		0, 		0},
+	 
+	 {8, 	6, 		2, 		0, 		1, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
-	 {8, 	2, 		2, 		0, 		1, 		0,
+	 {8, 	8, 		8, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0},
+	 0, 	0, 		1, 		0, 		0, 		0},
 	 
-	 {8, 	2, 		3, 		0, 		0, 		0,
+	 {9, 	9, 		9, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0},
-	 
-	 {0, 	0, 		0, 		0, 		4, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0},
+	 0, 	0, 		9, 		0, 		0, 		0},
 }

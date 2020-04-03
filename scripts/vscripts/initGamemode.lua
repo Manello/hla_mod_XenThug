@@ -37,7 +37,7 @@ _G.Stores = {
 	HealthVender = 0
 }
 
-_G.CurrentWave = 3
+_G.CurrentWave = 1
 
 _G.UpdateStep = UPDATE_DELAY_INIT
 _G.UpdateStepTimer = 0
