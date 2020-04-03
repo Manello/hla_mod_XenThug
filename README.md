@@ -5,6 +5,8 @@ A Half Life: Alyx Mod including a classic wave defense gamemode
 
 If you are a player and don't want to make your own map: This is the wrong page for you! I will link some custom maps containing this mod below for you ;)
 
+- No maps released yet
+
 ### [ROADMAP, Version 0.1]
 
 ##### Features coming soonTM:
