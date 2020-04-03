@@ -3,6 +3,7 @@ A Half Life: Alyx Mod, classic wave defense mode
 
 <h3>[ROADMAP, Version 0.1]</h3>
 
+TBA
 
 <h3>[FOR MAPPERS, Version 0.1]</h3>
 In order to enable this Mod on your custom Map you have to follow 3 simple steps:
@@ -84,5 +85,8 @@ Since you can walk around and fight enemies your player will run out of ammo, no
 
 A vending machine consists out of a *trigger_multiple* and an *info_landmark*.
 
+MORE INFO COMING ASAP ON SHOPS
 
 <h3>[FOR MODDERS, Version 0.1]</h3>
+
+TBA
