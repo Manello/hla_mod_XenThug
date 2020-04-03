@@ -25,9 +25,9 @@ This Value defines the difficulty with which the game starts with. The health of
 In this list you can find multiple blocks of numbers. Each block encolsed in {} brackets is refering to one wave. Each number inside such a block represents the amount of enemies to spawn for this wave. I've formatted the waves in a table format so you can simply see which number represents which enemy. Here is an example:
 
 ```
--- Crab		Armor	Poison	???		Runn	Black
--- Zomb		Jeff	Antlio	???		???		???
--- Comb		CombS	Manhac	???		???		???
+-- 	Crab		ArmorCrab	PoisonCrab	???		RunnCrab	BlackCrab
+--	Zombie		Jeff		Antlion		???		???		???
+--	Combine		Combine		Manhack		???		???		???
 
 --Defines how many of each enemy type should be in each wave
 _G.WaveList = {
@@ -78,7 +78,7 @@ Now let's start Hammer and open up your custom map. We will have to set a few tr
 ##### Landmarks
 Now you will have to define where your enemies should spawn. For this you have to create one or multiple *info_landmark*. Make sure you name all of these landmarks *EnemySpawn*. Hammer will mark the name orange, but you can ignore that.
 
-That is it! If you startup your map now it should start spawning the waves you defined. All further steps are optional, but I recommend them to improve your gameplay experience!
+*That is it! If you startup your map now it should start spawning the waves you defined. All further steps are optional, but I recommend them to improve your gameplay experience!*
 
 ##### Shopsystem & Economy
 Since you can walk around and fight enemies your player will run out of ammo, no matter how much you will initally give him. Thus I've implemented a shopsystem, this will enable you to create vending machines which will sell ammunition and health to the player once the bumps into them. The currency is polymer and enemies are dropping that once killed. (Currently you can't set how often they drop polymers, nor how much they drop as it is bugged.)
@@ -117,6 +117,7 @@ Let's go through the process of creating a vending machine:
   - Delay:                  0
   - Fire once only:         No
 
+You should be able to buy ammo on this vender now once you are ingame! Of course only if you have enough polymer. Example of a shop setup:
 
 ![ALT TEXT An Image of a crappy looking vender](http://cvreleague.eu/wp-content/uploads/2020/04/Unbenannt.png)
 
