@@ -22,6 +22,7 @@ If you are a player and don't want to make your own map: This is the wrong page 
 - Fix navmesh for Zombies and Combines
 - Integrate scriptable Output callbacks, for example after a wave died to call custom functions
 - Add a framework for showing text ingame, for example for shops
+- Optimize code and serialize everything
 - And more stuff, not writing everything down yet
 
 ### [FOR MAPPERS, Version 0.1]
