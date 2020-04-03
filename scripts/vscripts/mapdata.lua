@@ -1,3 +1,8 @@
+--============ Copyright (c) Manuel "Manello" Bäuerle, All rights reserved. ==========
+-- Before using/modifying this code, please read LICENSE.txt
+-- 
+--=============================================================================
+
 --Classnames of each enemy type
 _G.EntEnums = {
 	"npc_headcrab", "npc_headcrab_armored", "npc_headcrab_black", "npc_headcrab_fast", "npc_headcrab_runner", "???",
