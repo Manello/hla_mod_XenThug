@@ -33,14 +33,14 @@ In this list you can find multiple blocks of numbers. Each block encolsed in {} 
 _G.WaveList = {
 	
   --THIS IS WAVE/BLOCK 1
-	{5, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		1, 		0, 		0, 		0},
+	{5, 		0, 		0, 		0, 		0, 		0,
+	 0, 		0, 		0, 		0, 		0, 		0,
+	 0, 		0, 		1, 		0, 		0, 		0},
 	 
    --THIS IS WAVE/BLOCK 2
-	 {2, 	5,		1,		0, 		0, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0},
+	 {2, 		5,		1,		0, 		0, 		0,
+	 0, 		0, 		0, 		0, 		0, 		0,
+	 0, 		0, 		0, 		0, 		0, 		0},
 }
 ```
 As you can see in this example we are spawning 5 normal headcrabs and one manhack in the first wave.
