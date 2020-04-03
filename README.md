@@ -83,9 +83,42 @@ That is it! If you startup your map now it should start spawning the waves you d
 ##### Shopsystem & Economy
 Since you can walk around and fight enemies your player will run out of ammo, no matter how much you will initally give him. Thus I've implemented a shopsystem, this will enable you to create vending machines which will sell ammunition and health to the player once the bumps into them. The currency is polymer and enemies are dropping that once killed. (Currently you can't set how often they drop polymers, nor how much they drop as it is bugged.)
 
-A vending machine consists out of a *trigger_multiple* and an *info_landmark*.
+A vending machine consists out of a *trigger_multiple* and an *info_landmark*. Each type of Vending machine can only exist ONCE, here are all types which are available right now:
 
-MORE INFO COMING ASAP ON SHOPS
+```
+AmmoVender		--Spawns a pistol mag, costs 1 polymer
+	RunScriptCode:	 _G.BuyAmmo(false)
+	
+ShellVender		--Spawns two shotgun shells, costs 1 polymer
+	RunScriptCode:	 _G.BuyShells(false)	
+	
+EnergyVender		--Spawns one smg energy cell, costs 3 polymer
+	RunScriptCode:	 _G.BuyEnergy(false)
+	
+MedkitVender		--Spawns one healing syringe, cost 2 polymer
+	RunScriptCode:	 _G.BuyMedkit(false)
+	
+HealthVender		--Spawns a vial which is used in combines healing stations, costs 8 polymer
+	RunScriptCode:	 _G.BuyHealth(false)
+	
+More to be added soon
+```
+
+Let's go through the process of creating a vending machine:
+
+1. Create an object for your vender. You can design it in any way you like it to. It could be even a NPC. In this example I simply used some cubes creating a hollow area.
+2. Create a *info_landmark* and place it where the vender should spawn the bought items. Set the landmarks Name to its type, for example *AmmoVender*.
+3. Create a *trigger_multiple* in front of it. Each time the player runs into it, it will take X polymers from the player and spawn the desired item. The trigger should be higher than the player, and as wide as the vending machine.
+4. Go to its properties to Outputs and add a new output like the following:
+  - My output named:        OnTrigger
+  - Target entities named:  AmmoVender		<<<<<---- set here the correct type instead!
+  - Via this input:         RunScriptCode
+  - With a parameter:       SendToConsole("_G.BuyAmmo(false)")
+  - Delay:                  0
+  - Fire once only:         No
+
+
+![ALT TEXT An Image of a crappy looking vender](http://cvreleague.eu/wp-content/uploads/2020/04/Unbenannt.png)
 
 <h3>[FOR MODDERS, Version 0.1]</h3>
 
