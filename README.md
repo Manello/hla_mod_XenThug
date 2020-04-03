@@ -61,7 +61,7 @@ Now let's start Hammer and open up your custom map. We will have to set a few tr
   - Via this input:         RunScriptCode
   - With a parameter:       SendToConsole("script_reload_code initGamemode")
   - Delay:                  0
-  - Fire once only:         Yes
+  - Fire only once:         Yes
 
 1. Let's setup the next trigger. This trigger should include your WHOLE map, every bit where the player might be in.
 2. Make sure its class is *trigger_multiple* and set its Name to *UpdateTrigger*.
@@ -73,7 +73,7 @@ Now let's start Hammer and open up your custom map. We will have to set a few tr
   - Via this input:         RunScriptCode
   - With a parameter:       SendToConsole("script_reload_code myGamemode")
   - Delay:                  0
-  - Fire once only:         No
+  - Fire only once:         No
   
 ##### Landmarks
 Now you will have to define where your enemies should spawn. For this you have to create one or multiple *info_landmark*. Make sure you name all of these landmarks *EnemySpawn*. Hammer will mark the name orange, but you can ignore that.
@@ -115,12 +115,13 @@ Let's go through the process of creating a vending machine:
   - Via this input:         RunScriptCode
   - With a parameter:       SendToConsole("_G.BuyAmmo(false)")
   - Delay:                  0
-  - Fire once only:         No
+  - Fire only once:         No
 
 You should be able to buy ammo on this vender now once you are ingame! Of course only if you have enough polymer. Example of a shop setup:
 
 ![ALT TEXT An Image of a crappy looking vender](http://cvreleague.eu/wp-content/uploads/2020/04/Unbenannt.png)
 
-<h3>[FOR MODDERS, Version 0.1]</h3>
+**That's everything you need to know about this mod for this version!**
 
-TBA
+Do you have questions? Reach out to me in Discord! (Manello#1406)
+If you are in general interested in updates for this and my future mods follow me on [Twitter](https://twitter.com/manellomb/)!
