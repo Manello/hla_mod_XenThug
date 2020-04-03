@@ -1,11 +1,28 @@
 # [MOD] Half Life: Alyx - XenThug
-A Half Life: Alyx Mod, classic wave defense mode
+A Half Life: Alyx Mod including a classic wave defense gamemode
 
-<h3>[ROADMAP, Version 0.1]</h3>
 
-TBA
 
-<h3>[FOR MAPPERS, Version 0.1]</h3>
+If you are a player and don't want to make your own map: This is the wrong page for you! I will link some custom maps containing this mod below for you ;)
+
+### [ROADMAP, Version 0.1]
+
+##### Features coming soonTM:
+- Fix spawn positions of items in shops
+- Fix spawn positions of polymers on kills
+- Add shops for the following Items: trip mines, grenades, xen grenades
+- Make shop prices customizeable for mappers
+- Implement a configurable drop chance for polymers
+- Implement a configurable amount of polymers per kill
+- Add a break function to give the player time to buy stuff after each wave
+
+##### Features coming after soonTM
+- Fix navmesh for Zombies and Combines
+- Integrate scriptable Output callbacks, for example after a wave died to call custom functions
+- Add a framework for showing text ingame, for example for shops
+- And more stuff, not writing everything down yet
+
+### [FOR MAPPERS, Version 0.1]
 In order to enable this Mod on your custom Map you have to follow 3 simple steps:
 
 #### I. **Files**
@@ -27,7 +44,7 @@ In this list you can find multiple blocks of numbers. Each block encolsed in {} 
 ```
 -- 	Crab		ArmorCrab	PoisonCrab	???		RunnCrab	BlackCrab
 --	Zombie		Jeff		Antlion		???		???		???
---	Combine		Combine		Manhack		???		???		???
+--	Combine		Combine S	Manhack		???		???		???
 
 --Defines how many of each enemy type should be in each wave
 _G.WaveList = {
@@ -125,3 +142,4 @@ You should be able to buy ammo on this vender now once you are ingame! Of course
 
 Do you have questions? Reach out to me in Discord! (Manello#1406)
 If you are in general interested in updates for this and my future mods follow me on [Twitter](https://twitter.com/manellomb/)!
+And if you have questions about mapping or modding in general, please join this [Discord](https://discord.gg/Yt86zaG)!
