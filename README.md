@@ -1,7 +1,15 @@
 # [MOD] Half Life: Alyx - XenThug
 A Half Life: Alyx Mod including a classic wave defense gamemode
 
+It is currently work in progress and will receive frequent updates. 
+Right now the mod supports:
+- Spawning different kind of waves, respawning new enemies when nobody is alive anymore
+- Drops polymer as a currency on the death of an enemy
+- Has vending machines at which the player can buy ammo/health for polymer
+- Endless mode, if all map-defined waves got spawned it starts over again, but doubles the enemies life each time!
+- Portable to any map without a ton of work!
 
+https://www.youtube.com/watch?v=UeSIuSt_FSo&feature=youtu.be
 
 If you are a player and don't want to make your own map: This is the wrong page for you! I will link some custom maps containing this mod below for you ;)
 
