@@ -11,9 +11,9 @@ Right now the mod supports:
 
 https://www.youtube.com/watch?v=UeSIuSt_FSo&feature=youtu.be
 
-If you are a player and don't want to make your own map: This is the wrong page for you! I will link some custom maps containing this mod below for you ;)
+Here is a list of the currently available maps:
 
-- Test map: This map is simply a proof of concept and is contained in the testmap.zip! To play the map simply place the content of this zip file inside your Half-Life Alyx/game/hlvr folder, and in steam add a "+map invasion01" starting parameter to Half Life:Alyx!
+- **Test map:** This map is simply a proof of concept and is contained in the testmap.zip! To play the map simply place the content of this zip file inside your Half-Life Alyx/game/hlvr folder, and in steam add a "+map invasion01" startup parameter to Half Life:Alyx! (And no, it will not break your game, simply remove the startup parameter to play the normal game again)
 
 ### [ROADMAP, Version 0.1]
 
