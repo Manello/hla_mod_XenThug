@@ -93,7 +93,7 @@ Now let's start Hammer and open up your custom map. We will have to set a few tr
 
 1. Let's setup the next trigger. This trigger should include your WHOLE map, every bit where the player might be in.
 2. Make sure its class is *trigger_multiple* and set its Name to *UpdateTrigger*.
-3. Set its "Delay Before Reset" to 0.2
+3. Set its "Delay Before Reset" to 1
 4. Open up the triggers *Properties* and go to *Outputs*
 5. Add a new output with the following settings:
   - My output named:        OnTrigger
@@ -141,7 +141,7 @@ Let's go through the process of creating a vending machine:
   - My output named:        OnTrigger
   - Target entities named:  AmmoVender		<<<<<---- set here the correct type instead!
   - Via this input:         RunScriptCode
-  - With a parameter:       SendToConsole("_G.BuyAmmo(false)")
+  - With a parameter:       _G.BuyAmmo(false)
   - Delay:                  0
   - Fire only once:         No
 
