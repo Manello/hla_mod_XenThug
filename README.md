@@ -27,6 +27,8 @@ Here is a list of the currently available maps:
 - And more stuff
 
 
+### [FOR MAPPERS, Version 0.2]
+Please refer to this new Readme for mappers: [README_MAPPERS](https://github.com/Manello/hla_mod_XenThug/blob/master/README_MAPPERS.md)
 
 Do you have questions? Reach out to me in Discord! (Manello#1406)
 If you are in general interested in updates for this and my future mods follow me on [Twitter](https://twitter.com/manellomb/)!
