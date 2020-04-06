@@ -105,6 +105,8 @@ Now let's start Hammer and open up your custom map. We will have to set a few tr
 ##### Landmarks
 Now you will have to define where your enemies should spawn. For this you have to create one or multiple *info_landmark*. Make sure you name all of these landmarks *EnemySpawn*. Hammer will mark the name orange, but you can ignore that.
 
+Note: You should leave enough space around each landmark so enemies won't bug into walls or objects. A radius of 40 inches around the spawn is recommended.
+
 *That is it! If you startup your map now it should start spawning the waves you defined. All further steps are optional, but I recommend them to improve your gameplay experience!*
 
 ### Shopsystem & Economy
