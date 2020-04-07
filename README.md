@@ -18,7 +18,7 @@ Here is a list of the currently available maps:
 
 - **Test map:** This map is simply a proof of concept and is contained in the xenthugdemo.zip! To play the map simply place the content of this zip file inside your Half-Life Alyx/game/hlvr folder, and in steam add a "+map xenthugdemo" startup parameter to Half Life:Alyx! (And no, it will not break your game, simply remove the startup parameter to play the normal game again)
 
-### [ROADMAP, Version 0.2]
+### [ROADMAP, Version 0.1]
 
 ##### Features coming soonTM
 - Fix navmesh for Zombies and Combines
@@ -28,7 +28,7 @@ Here is a list of the currently available maps:
 
 
 ### [FOR MAPPERS, Version 0.2]
-Please refer to this new Readme for mappers: [README_MAPPERS](https://github.com/Manello/hla_mod_XenThug/blob/master/README_MAPPERS.md)
+Please refer to this new readme for mappers: [README_MAPPERS](https://github.com/Manello/hla_mod_XenThug/blob/master/README_MAPPERS.md)
 
 Do you have questions? Reach out to me in Discord! (Manello#1406)
 If you are in general interested in updates for this and my future mods follow me on [Twitter](https://twitter.com/manellomb/)!
