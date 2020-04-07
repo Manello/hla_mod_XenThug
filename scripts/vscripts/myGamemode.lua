@@ -4,10 +4,6 @@
 -- This file contains all functions used specifically by XenThug
 --=============================================================================
 
---TODO today:
---Fix existing Shop system
---Serialize shop system so you can spawn ANY Entity for buying!
-
 --Register each enemy DIRECTLY after it spawned
 --returns true on successfully registering one NPC
 function _G.RegisterNewEnemy(enemyClass)
@@ -291,6 +287,9 @@ function _G.UpdateVenders()
 				if GoodAlreadySet(lookupItems[j]) == true then
 					break
 				else
+					if vend.Model ~= "" then
+						lookupItems[j]:SetModel(vend.Model)
+					end
 					lookupItems[j]:SetOrigin(vend.Entity:GetOrigin())
 					AlreadySetGoods[#AlreadySetGoods + 1] = lookupItems[j]
 					vend.InUse = false
