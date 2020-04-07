@@ -1,5 +1,5 @@
 --============ Copyright (c) Manuel "Manello" Bäuerle, All rights reserved. ==========
---
+-- 
 -- This file contains generic functions, globals and constants
 --=============================================================================
 
