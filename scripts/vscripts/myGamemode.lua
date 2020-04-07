@@ -4,6 +4,7 @@
 -- This file contains all functions used specifically by XenThug
 --=============================================================================
 
+
 --Register each enemy DIRECTLY after it spawned
 --returns true on successfully registering one NPC
 function _G.RegisterNewEnemy(enemyClass)
@@ -328,38 +329,18 @@ function GamemodeThink()
 				elseif UpdateStepTimer == 10 then
 					UpdateStepTimer = 0
 					UpdateStep = UPDATE_STEP_SPAWN
+					DelayStart(WaveDelay)
 				end
-				
-				CommandStack.Exec()
 				
 			elseif UpdateStep == UPDATE_STEP_CHECK then
-				
-				if DebugEnabled == true then
-					--ModDebug("Running... Wave alive?")
-				end
-				
-				CommandStack.Exec()
-				
-				if #ToDelete > 0 then
-					if ToDelete[#ToDelete] ~= nil then
-						AlreadyDeletedCorpses[#AlreadyDeletedCorpses + 1] = ToDelete[#ToDelete]
-						CommandStack.Add("ent_remove "..tostring(ToDelete[#ToDelete]:entindex()))
-						table.remove(ToDelete)
-						
-						if DebugEnabled == true then
-							ModDebug("Deleted one corpse.")
-						end
-					end
-				end
-			
-				UpdateVenders()
-				DoPolymerEconomy()
 			
 				if IsWaveAlive() == false then
 					CleanupWave()
 					EmitSoundOn(WaveFinishSound, ActivePlayer)
-					DelayStart(WaveDelay)
+
 					UpdateStep = UPDATE_STEP_SPAWN
+					
+					DelayStart(WaveDelay)
 					
 					if DebugEnabled == true then
 						ModDebug("Wave dead. Cleanup started.")
@@ -367,7 +348,7 @@ function GamemodeThink()
 				end
 				
 			elseif UpdateStep == UPDATE_STEP_SPAWN then
-				
+					
 				if DebugEnabled == true then
 					ModDebug("Spawning Wave "..tostring(CurrentWave))
 				end
@@ -384,10 +365,6 @@ function GamemodeThink()
 				
 			elseif UpdateStep == UPDATE_STEP_REGISTER then
 				
-				if DebugEnabled == true then
-					ModDebug("Registering new wave!")
-				end
-				
 				if HasWaveSpawned() == true then
 					UpdateEnemyList(UpdateClasses)
 					SetWavePositions()
@@ -398,6 +375,24 @@ function GamemodeThink()
 			end
 		end
 	end
+
+	CommandStack.Exec()
+	
+	if #ToDelete > 0 then
+		if ToDelete[#ToDelete] ~= nil then
+			AlreadyDeletedCorpses[#AlreadyDeletedCorpses + 1] = ToDelete[#ToDelete]
+			CommandStack.Add("ent_remove "..tostring(ToDelete[#ToDelete]:entindex()))
+			table.remove(ToDelete)
+			
+			if DebugEnabled == true then
+				ModDebug("Deleted one corpse.")
+			end
+		end
+	end
+	
+	UpdateVenders()
+	
+	DoPolymerEconomy()
 	
 	UpdateModClock()
 	
