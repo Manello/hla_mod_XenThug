@@ -215,7 +215,7 @@ end
 --Returns true if the Delay is still active
 function _G.DelayActive()
 	local timeDiff = ModClock - DelayLastTime
-	DelaySeconds = DelaySeconds - math.abs(timeDiff)
+	DelaySeconds = DelaySeconds - math.abs(timeDiff/1000)
 	
 	if DelaySeconds <= 0 then
 		DelaySeconds = 0
