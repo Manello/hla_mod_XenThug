@@ -22,8 +22,9 @@ Here is a list of the currently available maps:
 
 ##### Features coming soonTM
 - Fix navmesh for Zombies and Combines
-- Integrate scriptable Output callbacks, for example after a wave died to call custom functions
+- Integrate scriptable Output callbacks, for example after a wave died to call custom functions (wip as the CommandStack)
 - Add a framework for showing text ingame, for example for shops
+- Add option to auto pickup on walking over polymers
 - And more stuff
 
 
