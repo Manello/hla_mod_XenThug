@@ -154,4 +154,11 @@ You should be able to buy ammo on this vender now once you are ingame! Of course
 
 Inspiration: Make something like a food vending machine in an office building! This way you can include multiple shops in one if you want to.
 
+### Scripting addon
+The way to interact with my mod is currently wip, but you can already use certain features. I highly recommend using my CommandStack.Add in general instead of SendToConsole, as it will make sure you are not interfering with my mod.
+
+**Console Command:** In order to run a console command simply make any trigger execute RunScriptCode with the parameter *CommandStack.Add("your console command here")*. It will execute the command as soon as the mod has time for it. (A matter of a few frames at max)
+
+**Delayed Console Command:** In order to use a delayed console command simply make any trigger execute RunScriptCode with the parameter *CommandStack.Add("TTTTyour command here", COMMAND_DELAYEDCONSOLE)*. TTTT is the time in milliseconds to wait before the command should be executed. Always use 4 digits here, example: *0500*, waits 0.5 seconds.
+
 **That's everything you need to know about this mod for this version!**
