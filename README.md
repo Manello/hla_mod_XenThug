@@ -14,7 +14,7 @@ If you want to play the normal campaign again simply remove the launch option yo
 
 Here is a list of the currently available maps:
 
-- **Warehouse:** The first fully functional Map featuring the XenThug Gamemode. Fight against crabs, zombies, combines and many more in an atmospheric environment! You can download the map Here.
+- **Warehouse:** The first fully functional Map featuring the XenThug Gamemode. Fight against crabs, zombies, combines and many more in an atmospheric environment! You can download the map Here LINK MAP DOWNLOAD OR STEAMPAGE.
 
 - **Demos:** These maps have been proof-of-concepts in the past and do not offer a real gameplay experience.
 
