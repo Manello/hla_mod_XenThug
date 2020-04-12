@@ -1,9 +1,9 @@
 # [MOD] Half Life: Alyx - XenThug - 0.28
 A Half Life: Alyx Mod including a classic horde defense gamemode!
 
-You can find the latest Map **Warehouse** featuring a stable release of my Mod right here! Convince yourself and have a look at the **Trailer**! LINK TRAILER HERE
+You can find the latest Map **Warehouse** featuring a stable release of my Mod right here! Convince yourself and have a look at the **[Trailer](https://www.youtube.com/watch?v=bSvwAgw45H0)**!
 
-In order to play the map you have to download the XenThug-Warehouse-0.28.zip LINK IT HERE and paste it's content into your "steamapps/Half-Life Alyx/game/hlvr" folder. 
+In order to play the map you have to download the [XenThug Warehouse.zip](https://github.com/Manello/hla_mod_XenThug/releases/download/WarehouseV1/XenThug-Warehouse-V1.zip) and paste it's content into your "steamapps/Half-Life Alyx/game/hlvr" folder. 
 
 ![ALT TEXT Pasting the content into hlvr](http://cvreleague.eu/wp-content/uploads/2020/04/HowToInstall.png)
 
@@ -14,7 +14,7 @@ If you want to play the normal campaign again simply remove the launch option yo
 
 Here is a list of the currently available maps:
 
-- **Warehouse:** The first fully functional Map featuring the XenThug Gamemode. Fight against crabs, zombies, combines and many more in an atmospheric environment! You can download the map Here LINK MAP DOWNLOAD.
+- **Warehouse:** The first fully functional Map featuring the XenThug Gamemode. Fight against crabs, zombies, combines and many more in an atmospheric environment! You can download the map [Here](https://github.com/Manello/hla_mod_XenThug/releases/download/WarehouseV1/XenThug-Warehouse-V1.zip).
 
 - **Demos:** These maps have been proof-of-concepts in the past and do not offer a real gameplay experience.
 
