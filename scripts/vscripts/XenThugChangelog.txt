@@ -1,0 +1,30 @@
+===== Changelog XenThug
+
+===== V0.1 ===== 04.04.2020
+- First Release
+- ADDED: Basic wave spawning system
+- ADDED: Basic shop system for 5 different types of goods
+- ADDED: Polymer drop for kill
+
+===== V0.2 ===== 06.04.2020
+- FIXED: New update loop system minimizes time of enemy stack in front of player upon wave spawn
+------>: Got rid of that damn map spanning update trigger with 1hz
+- FIXED: Polymer economy was bugged
+- ADDED: Delay function in between waves
+- ADDED: Basic Sound events
+- ADDED: WIP interface to use events fired by my Mod
+- ADDED: Shops are now fully customizeable
+
+===== V0.21 ===== 07.04.2020
+- FIXED: DelayWave was not working
+
+===== V0.22 ===== 07.04.2020
+- FIXED: Shops couldn't be used in between waves
+
+===== V0.27
+- FIXED: Sometimes players would be able to buy even if they had no polymers (The cleanup after each wave caused the system to sometimes put them in your backpack, no longer the case)
+- ADDED: Small performance improvement
+- ADDED: StartDelay, upon InitTrigger is triggered the time to wait until the first wave arrives
+- FIXED: The shops would sometimes pull out the mag from your pistol
+- FIXED: The shops would sometimes teleport empty mags into the vender
+- FIXED: Sometimes enemies wouldn't get teleported to their spawning place, breaking the game in most cases

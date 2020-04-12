@@ -24,19 +24,24 @@ _G.EnablePerformanceMode = false
 _G.DebugEnabled = true
 
 --Polymer the player starts with
-_G.MyPolymer = 15
+_G.MyPolymer = 5
+
+-- IMPLEMENT OPTION TO DISABLE ENDLESS MDOE; TRIGGER AFTER END; AFTER EACH WAVE; AFTER WAVE X
+
+--Game will initialize on the InitTrigger (so shops etc work), but waits for the first wave for this time
+_G.StartDelay = 30
 
 --Defines the time in seconds to wait in between each wave before spawning a new one
-_G.WaveDelay = 5.0
+_G.WaveDelay = 10.0
 
 --Difficulty Modifier. This will multiply the health of NPCs
 _G.WaveModifier = 1.0
 
 --Chance for each kill to drop Polymer (0.5 = 50%)
-_G.PolymerDropChance = 0.7
+_G.PolymerDropChance = 0.80
 
 --===============================================This table shows the layout of the enmy tables (Careful, some NPCs are broken and can't be used yet!)
--- Crab		Armor	Poison	???		Runn	Black
+-- Crab		Armor	Poison	???		???		???
 -- Zomb		Jeff	Antlio	???		???		???
 -- Comb		CombS	Manhac	???		???		???
 
@@ -47,27 +52,79 @@ _G.WaveList = {
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
-	 {4, 	5,		1,		0, 		0, 		0,
-	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		1, 		0, 		0, 		0},
-	 
-	 {8, 	6, 		2, 		0, 		1, 		0,
+	 {6, 	1,		0,		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
-	 {8, 	8, 		8, 		0, 		0, 		0,
+	 {0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	2, 		1, 		0, 		0, 		0},
+	 
+	 {4, 	2, 		2, 		0, 		0, 		0,
+	 2, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {4, 	1, 		1, 		0, 		0, 		0,	--5
+	 4, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {4, 	1, 		3, 		0, 		0, 		0,	
+	 5, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {8, 	4, 		4, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {2, 	2, 		1, 		0, 		0, 		0,
+	 5, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	3, 		2, 		0, 		0, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,	--10
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	5, 		2, 		0, 		0, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	1, 		9, 		0, 		0, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		5, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {5, 	0, 		2, 		0, 		0, 		0,
+	 0, 	0, 		5, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {2, 	0, 		0, 		0, 		0, 		0,	
+	 8, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,	--15
+	 9, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		2, 		0, 		0, 		0},
+	 
+	 {2, 	2, 		2, 		0, 		0, 		0,	
+	 6, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		1, 		0, 		0, 		0},
 	 
-	 {9, 	9, 		9, 		0, 		0, 		0,
+	 {0, 	0, 		0, 		0, 		0, 		0,	
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	0, 		9, 		0, 		0, 		0},
+	 0, 	0, 		15, 	0, 		0, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,	
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	6, 		5, 		0, 		0, 		0},
 }
 
 --===============================================
 
 -- Plays these sounds upon WaveSpawn / when the whole wave got killed
-_G.WaveFinishSound = "Elevator_Distillery.Mechanism_Broken_Child"
+_G.WaveFinishSound = "Example.core_start_oneshot"
 _G.WaveStartSound = "Elevator_Distillery.Mechanism_Broken_Child"
 
 --===============================================
@@ -77,7 +134,7 @@ _G.WaveStartSound = "Elevator_Distillery.Mechanism_Broken_Child"
 _G.Vender = {
 	{Name = "Vender_Ammo",									--The shop spawner landmarks name
 	Item = "item_hlvr_clip_energygun",						--The item to sell
-	Model = "",												--Custom Model, only needed if you want to spawn something like the explosive jerrycan (in general for prop_static, prop_physics and so on)
+	Prototype = "",												--Custom Prototype, only needed if you want to spawn something like the explosive jerrycan (in general for prop_static, prop_physics and so on)
 	Price = 1,												--Number of Polymers needed
 	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						--Sound playing when selling something
 	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						--Sound playing when player has not enough money
@@ -85,17 +142,17 @@ _G.Vender = {
 	InUse = false},																	--DO NOT CHANGE InUse
 	
 	{Name = "Vender_Shells",				
-	Item = "item_hlvr_clip_shotgun_single",	
-	Model = "",
-	Price = 1,							
+	Item = "item_hlvr_clip_shotgun_multiple",	
+	Prototype = "",
+	Price = 2,							
 	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
 	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
 	Entity = {},
 	InUse = false},
 	
-	{Name = "Vender_Energy",				
-	Item = "item_hlvr_clip_rapidfire",	
-	Model = "",
+	{Name = "Vender_Grenade",				
+	Item = "item_hlvr_grenade_xen",	
+	Prototype = "",
 	Price = 3,							
 	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
 	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
@@ -104,19 +161,73 @@ _G.Vender = {
 	
 	{Name = "Vender_Medkit",				
 	Item = "item_healthvial",	
-	Model = "",
+	Prototype = "",
 	Price = 2,							
 	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
 	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
 	Entity = {},	
 	InUse = false},
 	
-	{Name = "Vender_Gas",									--Explosive Jerry can example
+	{Name = "Vender_Beer",				
 	Item = "prop_physics",	
-	Model = "models/props/explosive_jerrican_1.vmdl",		--ATTENTION: Lua does not handle "\" these slashes! use the "/" ones!
-	Price = 3,							
+	Prototype = "BeerPrototype",
+	Price = 0,							
 	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
 	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
-	Entity = {},
+	Entity = {},	
+	InUse = false},
+	
+	{Name = "Vender_Paper",				
+	Item = "prop_physics",	
+	Prototype = "PaperPrototype",
+	Price = 0,							
+	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
+	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
+	Entity = {},	
+	InUse = false},
+	
+	{Name = "Vender_Energy",				
+	Item = "Item_hlvr_clip_rapidfire",	
+	Prototype = "",
+	Price = 4,							
+	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
+	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
+	Entity = {},	
+	InUse = false},
+	
+	{Name = "Vender_Health",				
+	Item = "item_hlvr_health_station_vial",	
+	Prototype = "",
+	Price = 6,							
+	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
+	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
+	Entity = {},	
+	InUse = false},
+	
+	{Name = "Vender_RealGrenade",				
+	Item = "item_hlvr_grenade_frag",	
+	Prototype = "",
+	Price = 4,							
+	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
+	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
+	Entity = {},	
+	InUse = false},
+	
+	{Name = "Vender_Mine",				
+	Item = "item_hlvr_weapon_tripmine",	
+	Prototype = "",
+	Price = 4,							
+	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
+	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
+	Entity = {},	
+	InUse = false},
+	
+	{Name = "Vender_Jerri",				
+	Item = "prop_physics",	
+	Prototype = "JerriPrototype",
+	Price = 0,							
+	SoundSell = "CombatStrider.Warp_Cannon_Failed_Shot_Mech",						
+	SoundNoMoney = "Elevator_Distillery.Mechanism_Broken_Child",						
+	Entity = {},	
 	InUse = false},
 }
