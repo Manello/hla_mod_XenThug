@@ -96,9 +96,14 @@ end
 function _G.SetWavePositions()
 	local d = 1
 	for i = 1, #NpcList, 1 do
-		NpcList[i]:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
-		NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
-		--Eventuell Hörreichweite der Gegner extrem erhöhen so das sie einen immer hören?
+		if NpcList[i]:GetClassname() == "npc_manhack" then
+			NpcList[i]:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
+			NpcList[i]:SetOrigin(SpawnLocation[d]:GetOrigin())
+			NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
+		else
+			NpcList[i]:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
+			NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
+		end
 		
 		d = d + 1
 		if d > #SpawnLocation then
@@ -320,6 +325,23 @@ function _G.GoodAlreadySet (theEnt)
 	return false
 end
 
+-- Does the scoreboard stuff
+function _G.SetScore()
+	ScoreTotal = ScoreTotal + ScoreForThisRound
+	Scoreboard:SetMessage("Score\n"..tostring(ScoreTotal))
+end
+
+-- Calculates the score for the round which just started
+function _G.GetNextScore()
+	ScoreForThisRound = 0
+	local lastWave = CurrentWave
+	if lastWave > 1 then
+		lastWave = lastWave - 1
+	end
+	for i = 1, #WaveList[lastWave], 1 do
+		ScoreForThisRound = ScoreForThisRound + WaveList[lastWave][i] * ScorePerKill[i]
+	end
+end
 
 -- Doing the Polymer eco for weapon upgrades
 -- function _G.WeaponUpgraded(weapon, upgradeType)
@@ -394,6 +416,9 @@ function GamemodeThink()
 					UpdateStep = UPDATE_STEP_SPAWN
 					
 					DelayStart(WaveDelay)
+					
+					GetNextScore()
+					SetScore()
 					
 					if DebugEnabled == true then
 						ModDebug("Wave dead. Cleanup started.")

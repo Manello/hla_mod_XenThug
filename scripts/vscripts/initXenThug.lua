@@ -5,7 +5,7 @@
 
 require "mapdata"
 
-print ("\n\n Initializing Manellos XenThug Mod...")
+print ("\n\n Initializing Manellos Invasion Mod...")
 
 _G.ActivePlayer = Entities:GetLocalPlayer()
 
@@ -50,6 +50,15 @@ _G.UpdateClasses = {}
 _G.UpdateClassesAmounts = {}
 
 _G.SpawnLocation = {}
+
+_G.Scoreboard = {}
+_G.ScoreForThisRound = 0
+_G.ScoreTotal = 0
+_G.ScorePerKill = {
+	5, 		5, 		20, 	0, 		25, 		20,
+	25, 	0, 		10,		0, 		0, 			0,
+	30, 	30,		10,		0, 		0, 			0
+}
 
 --PrecacheEntityFromTable("npc_headcrab", 1 , 2)
 _G.CommandStack = {}
@@ -184,6 +193,8 @@ function _G.InitPreRuntimeObjects()
 			currEnt = Entities:Next(currEnt)
 		end
 	until (currEnt == firstEnt)
+	
+	Scoreboard = Entities:FindByName(Entities:First(), "Scoreboard")
 end
 
 --Prints all Entities which are visible in the CURRENT TICK
@@ -240,6 +251,8 @@ InitPreRuntimeObjects()
 _G.InitGamemodeDone = true
 
 require "XenThugGamemode"
+
+require "mapscript"
 
 ActivePlayer:SetThink(GamemodeThink, "xenthug_think", 0)
 ListenToGameEvent("player_drop_resin_in_backpack", Event_PolymerPickedUp, nil)

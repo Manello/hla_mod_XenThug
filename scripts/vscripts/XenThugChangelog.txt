@@ -21,10 +21,14 @@
 ===== V0.22 ===== 07.04.2020
 - FIXED: Shops couldn't be used in between waves
 
-===== V0.27
+===== V0.27 ===== 11.04.2020
 - FIXED: Sometimes players would be able to buy even if they had no polymers (The cleanup after each wave caused the system to sometimes put them in your backpack, no longer the case)
 - ADDED: Small performance improvement
 - ADDED: StartDelay, upon InitTrigger is triggered the time to wait until the first wave arrives
 - FIXED: The shops would sometimes pull out the mag from your pistol
 - FIXED: The shops would sometimes teleport empty mags into the vender
 - FIXED: Sometimes enemies wouldn't get teleported to their spawning place, breaking the game in most cases
+
+===== V0.28 - V 0.3 ===== 12.04.2020
+-FIXED: Manhacks wouldn't spawn at the right positions
+-ADDED: Scoreboard!

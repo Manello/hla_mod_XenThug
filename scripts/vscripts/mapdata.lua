@@ -21,7 +21,7 @@ _G.EntEnums = {
 _G.EnablePerformanceMode = false
 
 --Enables Debugging for mappers in VConsole2
-_G.DebugEnabled = true
+_G.DebugEnabled = false
 
 --Polymer the player starts with
 _G.MyPolymer = 5
@@ -38,10 +38,10 @@ _G.WaveDelay = 10.0
 _G.WaveModifier = 1.0
 
 --Chance for each kill to drop Polymer (0.5 = 50%)
-_G.PolymerDropChance = 0.80
+_G.PolymerDropChance = 0.75
 
 --===============================================This table shows the layout of the enmy tables (Careful, some NPCs are broken and can't be used yet!)
--- Crab		Armor	Poison	???		???		???
+-- Crab		Armor	Poison	???		Runner	???
 -- Zomb		Jeff	Antlio	???		???		???
 -- Comb		CombS	Manhac	???		???		???
 
@@ -60,7 +60,7 @@ _G.WaveList = {
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	2, 		1, 		0, 		0, 		0},
 	 
-	 {4, 	2, 		2, 		0, 		0, 		0,
+	 {4, 	2, 		2, 		0, 		1, 		0,
 	 2, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
