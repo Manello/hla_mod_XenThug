@@ -194,7 +194,7 @@ function _G.InitPreRuntimeObjects()
 		end
 	until (currEnt == firstEnt)
 	
-	Scoreboard = Entities:FindByName(Entities:First(), "Scoreboard")
+	Scoreboard = Entities:FindAllByName("Scoreboard")
 end
 
 --Prints all Entities which are visible in the CURRENT TICK

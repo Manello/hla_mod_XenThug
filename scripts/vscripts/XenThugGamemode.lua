@@ -328,7 +328,10 @@ end
 -- Does the scoreboard stuff
 function _G.SetScore()
 	ScoreTotal = ScoreTotal + ScoreForThisRound
-	Scoreboard:SetMessage("Score\n"..tostring(ScoreTotal))
+	
+	for i, board in ipairs(Scoreboard) do
+		board:SetMessage("Score\n"..tostring(ScoreTotal))
+	end
 end
 
 -- Calculates the score for the round which just started
