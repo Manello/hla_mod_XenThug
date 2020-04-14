@@ -92,7 +92,7 @@ Now let's start Hammer and open up your custom map. We will have to set a few tr
   - My output named:        OnTrigger
   - Target entities named:  SpawnTrigger
   - Via this input:         RunScriptCode
-  - With a parameter:       SendToConsole("script_reload_code initGamemode")
+  - With a parameter:       SendToConsole("script_reload_code initXenThug")
   - Delay:                  0
   - Fire only once:         Yes
   
