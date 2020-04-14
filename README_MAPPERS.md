@@ -1,4 +1,7 @@
 ## [FOR MAPPERS, Version 0.32]
+
+**NOTE: Updated VMap with an example of all features will follow again very soon!**
+
 In order to enable this Mod on your custom Map you have to follow 3 simple steps:
 
 ### I. **Files**
