@@ -1,4 +1,4 @@
-## [FOR MAPPERS, Version 0.28]
+## [FOR MAPPERS, Version 0.32]
 In order to enable this Mod on your custom Map you have to follow 3 simple steps:
 
 ### I. **Files**
@@ -63,6 +63,53 @@ As you can see in this example we are spawning 5 normal headcrabs and one manhac
 The second wave spawns 2 headcrabs, 5 armored headcrabs and 1 poisonous headcrab.
 
 For now don't try to spawn more than 80 per wave as it can result in quite bad lag.
+
+#### **[UseSpawnGroups] 0.32 - Optional**
+If set to true you will need to configure the advanced spawning system like seen below. On false it spawns enemies randomly at any landmark whichs name starts with EnemySpawn
+
+#### **[SpawnGroup] 0.32 - Optional**
+This configuration is only required if UseSpawnGroups is set to true. This system allows you to enable/disable SpawnGroups. This can be used for example to create an unlockable room in your level and only start spawning enemies in there once the player unlocked it.
+
+The second feature of this new implementation is that you can define the enemy types which should spawn per SpawnGroup. Each spawning destination now has an assigned SpawnGroup, thus you can define which enemies should spawn in each location.
+
+The table below has the same structure as seen in **WaveList**, simply defining which enemy types can spawn at landmarks which are assigned to this SpawnGroup. For example, all spawn landmarks named *EnemySpawn_Mixed* will only spawn zombies, antlions and manhacks. Landmarks named "EnemySpawn_Combine" will only spawn combines and manhacks.
+
+```
+-- 	Crab		ArmorCrab	PoisonCrab	???		RunnCrab	BlackCrab
+--	Zombie		Jeff		Antlion		???		???		???
+--	Combine		Combine S	Manhack		???		???		???
+
+_G.SpawnGroup = {
+	Mixed = { Enabled = true,				--Will only use this group when it is enabled
+	false,	false, 	false, 	false, 	false, 	false,	--Spawns only zombies, antlions and manhacks
+	true, 	true, 	true, 	true, 	true, 	true,
+	false, 	false, 	true, 	true, 	true, 	true
+	},
+	
+	CrabGroup = { Enabled = true,
+	true,	true, 	true, 	true, 	true, 	true,	--Spawns only crabs
+	false, 	false, 	false, 	false, 	false, 	false,
+	false, 	false, 	false, 	false, 	false, 	false
+	},
+	
+	Combine = { Enabled = true,
+	false,	false, 	false, 	false, 	false, 	false,	--Spawns only Combines and Manhacks
+	false, 	false, 	false, 	false, 	false, 	false,
+	false, 	true, 	true, 	false, 	false, 	false
+	},
+```
+
+If you look at the table above, Enable simply defines if this SpawnGroup should be able to spawn enemies upon starting the map. You want this to be disabled in rooms which the player has to unlock first. To enable or disable you can use the following command which you have to use in one of your Outputs on the map as RunScriptCode:
+
+```
+EnableSpawnGroup(groupname, enabled)
+Examples:
+EnableSpawnGroup("Mixed", true)	=> will enable the Mixed spawn group, thus all EnemySpawn_Mixed landmarks will spawn their respective entities on the next wave
+EnableSpawnGroup("Combine", false) => will disable the Combine spawn group, thus all EnemySpawn_Combine landmarks won't spawn anything on the next wave
+```
+
+A detailed example map will follow for mappers very soon!
+
 
 #### **[Vender]**
 This array stores all of your customized shops. It is very easy to use, feel free to add as many new shops as you like to.
