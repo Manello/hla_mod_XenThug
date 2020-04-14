@@ -94,20 +94,136 @@ end
 
 --Sets Wave Positions and Difficulty
 function _G.SetWavePositions()
-	local d = 1
-	for i = 1, #NpcList, 1 do
-		if NpcList[i]:GetClassname() == "npc_manhack" then
-			NpcList[i]:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
-			NpcList[i]:SetOrigin(SpawnLocation[d]:GetOrigin())
-			NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
-		else
-			NpcList[i]:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
-			NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
+	if UseSpawnGroups ~= true then	--Old simple system
+		local d = 1
+		for i = 1, #NpcList, 1 do
+			if NpcList[i]:GetClassname() == "npc_manhack" then
+				NpcList[i]:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
+				NpcList[i]:SetOrigin(SpawnLocation[d]:GetOrigin())
+				NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
+			else
+				NpcList[i]:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
+				NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
+			end
+			
+			d = d + 1
+			if d > #SpawnLocation then
+				d = 1
+			end
+		end
+	else		--new advanced system
+		local spawnLocationSelected = {}
+		
+		for k, group in pairs(SpawnGroupContainer) do
+			SpawnGroupLocationIterator[k] = 1
+			SpawnGroupIsFull[k] = false
 		end
 		
-		d = d + 1
-		if d > #SpawnLocation then
-			d = 1
+		for i = 1, #NpcList, 1 do
+			spawnLocationSelected = ScanGroupsForSpawnLocation(i)
+			
+			if NpcList[i]:GetClassname() == "npc_manhack" then
+				NpcList[i]:SetAbsOrigin(spawnLocationSelected:GetAbsOrigin())
+				NpcList[i]:SetOrigin(spawnLocationSelected:GetOrigin())
+				NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
+			else
+				NpcList[i]:SetAbsOrigin(spawnLocationSelected:GetAbsOrigin())
+				NpcList[i]:SetHealth(NpcList[i]:GetHealth() * WaveModifier)
+			end
+		end
+	end
+end
+
+-- Enables or disables a SpawnGroup
+function _G.EnableSpawnGroup(name, enable)
+	SpawnGroup[name].Enabled = enable
+end
+
+--Looks for the next free SpawnLocation in all groups, returns it on success, otherwise returns first one in array and prints error
+--EXTENDS SetWavePositions
+_G.SpawnGroupIsFull = {}
+function _G.ScanGroupsForSpawnLocation(npcCounter)
+	-- If current group is full
+	-- If all groups are full
+	local success, location = false, {}
+	local foundLocation = false
+	
+	for k, group in pairs(SpawnGroupContainer) do
+		if SpawnGroup[k].Enabled == true and SpawnGroupIsFull[k] == false then
+			if SpawnGroup[k][ReturnIndexFromClass(NpcList[npcCounter]:GetClassname())] == true then
+				success, location = FindFreeLocationInGroup(k, npcCounter)
+				if success == true then
+					if DebugEnabled == true then
+						ModDebug("Added Enemy to SpawnGroup "..k)
+					end
+					
+					return location
+				else
+					SpawnGroupIsFull[k] = true
+					SpawnGroupLocationIterator[k] = 1
+					
+					if DebugEnabled == true then
+						ModDebug("One SpawnGroup is fully saturated")
+					end
+				end
+			end
+		end
+	end
+	
+	ModDebug("[Warning] More Enemies than Spawn Locations available")
+	
+	--All SpawnGroupsAreFull or none are suitable for this NPC. 
+	--Now reset SpawnGroupIsFull + SpawnGroupLocationIterator and do it again
+	
+	for k, group in pairs(SpawnGroupContainer) do
+		SpawnGroupLocationIterator[k] = 1
+		SpawnGroupIsFull[k] = false
+	end
+	success, location = false, {}
+	
+	for k, group in pairs(SpawnGroupContainer) do
+		if SpawnGroup[k].Enabled == true and SpawnGroupIsFull[k] == false then
+			if SpawnGroup[k][ReturnIndexFromClass(NpcList[npcCounter]:GetClassname())] == true then
+				success, location = FindFreeLocationInGroup(k, npcCounter)
+				if success == true then
+					return location
+				else
+					SpawnGroupIsFull[k] = true
+				end
+			end
+		end
+	end
+	
+	ModDebug("[Warning] Could not select the right SpawnGroup for this NPC")
+	
+	--If we didn't return until now there is no SpawnGroup available for this npc. Spawn him at the first enabled location and throw error
+	for k, group in ipairs(SpawnGroupContainer) do
+		if SpawnGroup[k].Enabled == true then
+			if SpawnGroupContainer[k][1] == nil then
+				ModDebug("[CRITICAL ALERT] No position available to spawn NPC! Mod may crash NOW or gameplay brakes!")
+				return nil
+			else
+				ModDebug("[ALERT] NO position available for this NPC, spawning at random! Fix me!!!!!")
+				return SpawnGroupContainer[k][1]
+			end
+		end
+	end
+end
+
+--Looks for the next free SpawnLocation in a SpawnGroup for a certain npc
+--EXTENDS ScanGroupsForSpawnLocation
+_G.SpawnGroupLocationIterator = {}
+function _G.FindFreeLocationInGroup(groupname, npcCounter)
+	if SpawnGroup[groupname].Enabled == true then
+		if SpawnGroup[groupname][ReturnIndexFromClass(NpcList[npcCounter]:GetClassname())] == true then	--Spawngroup can spawn NPC
+			
+			--Now look if you can find a free place in this spawn group
+			if SpawnGroupLocationIterator[groupname] > #SpawnGroupContainer[groupname] then
+				return false, nil	--returns false + nil if this spawn group already used all spawn locations
+			else
+				SpawnGroupLocationIterator[groupname] = SpawnGroupLocationIterator[groupname] + 1
+				return true, SpawnLocation[SpawnGroupContainer[groupname][SpawnGroupLocationIterator[groupname] - 1]] --On success return the location
+			end
 		end
 	end
 end

@@ -50,6 +50,8 @@ _G.UpdateClasses = {}
 _G.UpdateClassesAmounts = {}
 
 _G.SpawnLocation = {}
+_G.SpawnGroupContainer = {}	--This container holds the indexes of the SpawnLocation seperated by groups
+_G.SpawnGroupsCompiled = {}
 
 _G.Scoreboard = {}
 _G.ScoreForThisRound = 0
@@ -148,6 +150,27 @@ function _G.ModDebug(str)
 	print("[MOD][XenThug]: " .. str)
 end
 
+-- Assigns a SpawnLocation to a SpawnGroup, checks before if the SpawnGroup exists
+function _G.RegisterSpawnGroup(name, spawnLocIndex)
+	local groupExists = false
+	for k, group in pairs(SpawnGroupContainer) do
+		if k == name then
+			groupExists = true
+			break
+		end
+	end
+	
+	if groupExists == false then
+		SpawnGroupContainer[name] = {}
+		
+		if DebugEnabled == true then
+			ModDebug("Creating new SpawnGroup: "..name)
+		end
+	end
+	
+	SpawnGroupContainer[name][#SpawnGroupContainer[name] + 1] = spawnLocIndex
+end
+
 -- Update Objects which where placed in Hammer (pre-runtime)
 function _G.InitPreRuntimeObjects()
 	AlreadySetCorpses = Entities:FindAllByClassname("prop_ragdoll")		--ignore existing corspes as mappers use them as deco
@@ -159,13 +182,18 @@ function _G.InitPreRuntimeObjects()
 	for i = 1, #entsFound, 1 do
 		entName = entsFound[i]:GetName()
 		
-		if entName == "EnemySpawn" then
-			SpawnLocation[#SpawnLocation + 1] = entsFound[i]
+		if string.sub(entName, 1, 10) == "EnemySpawn" then		--Spawn Location, can be either only EnemySpawn, so without SpawnGroups
+			if string.len(entName) == string.len("EnemySpawn") then
+				SpawnLocation[#SpawnLocation + 1] = entsFound[i]
+			else												--Or it can be with an attached name, with SpawnGroups (e.g. EnemySpawn_MyGroup, the _ is mandatory)
+				SpawnLocation[#SpawnLocation + 1] = entsFound[i]
+				RegisterSpawnGroup(string.sub(entName, 12), #SpawnLocation)
+			end
 			if DebugEnabled == true then
 				ModDebug("Found Location: SpawnLocation")
 			end
 			
-		elseif string.sub(entName, 1, 7) == "Vender_" then		--Vender
+		elseif string.sub(entName, 1, 6) == "Vender" then		--Vender, e.g. Vender_Ammo
 			for j, vend in ipairs(Vender) do
 				if vend.Name == entName then
 					vend.Entity = entsFound[i]

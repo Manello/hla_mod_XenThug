@@ -32,6 +32,10 @@
 ===== V0.28 - V 0.3 ===== 12.04.2020
 -FIXED: Manhacks wouldn't spawn at the right positions
 -ADDED: Scoreboard!
+-FIXED: More, I forgot...
 
 ===== V0.31 ===== 13.04.2020
 - ADDED: Scoreboard now supports multiple displays
+
+===== V0.32 ===== 14.04.2020
+- ADDED: Advanced spawn system with SpawnGroups

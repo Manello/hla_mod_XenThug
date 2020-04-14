@@ -21,7 +21,7 @@ _G.EntEnums = {
 _G.EnablePerformanceMode = false
 
 --Enables Debugging for mappers in VConsole2
-_G.DebugEnabled = false
+_G.DebugEnabled = true
 
 --Polymer the player starts with
 _G.MyPolymer = 5
@@ -119,6 +119,32 @@ _G.WaveList = {
 	 {0, 	0, 		0, 		0, 		0, 		0,	
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	6, 		5, 		0, 		0, 		0},
+}
+
+--===============================================
+
+-- This enables the advanced enemy placing system. With this you can define where which enemies should spawn, and also active and deactive groups on demand
+_G.UseSpawnGroups = true
+
+_G.SpawnGroup = {
+	Mixed = { Enabled = true,				--Will only use this group when it is enabled
+	true,	false, 	false, 	false, 	false, 	false,	--Spawns all Enemy types but only normal crabs
+	true, 	true, 	true, 	true, 	true, 	true,
+	true, 	true, 	true, 	true, 	true, 	true
+	},
+	
+	CrabGroup = { Enabled = true,
+	true,	true, 	true, 	true, 	true, 	true,	--Spawns only crabs
+	false, 	false, 	false, 	false, 	false, 	false,
+	false, 	false, 	false, 	false, 	false, 	false
+	},
+	
+	Combine = { Enabled = true,
+	false,	false, 	false, 	false, 	false, 	false,	--Spawns only Combines and Manhacks
+	false, 	false, 	false, 	false, 	false, 	false,
+	false, 	true, 	true, 	false, 	false, 	false
+	},
+	
 }
 
 --===============================================
