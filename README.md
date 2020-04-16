@@ -3,7 +3,7 @@ A Half Life: Alyx Mod including a classic horde defense gamemode!
 
 You can find the latest Map **Warehouse** featuring a stable release of my Mod right here! Convince yourself and have a look at the **[Trailer](https://www.youtube.com/watch?v=bSvwAgw45H0)**!
 
-In order to play the map you have to download the [XenThug Warehouse.zip](https://github.com/Manello/hla_mod_XenThug/releases/download/warehouse11/XenThug-Warehouse-V1.1.zip) and paste it's content into your "steamapps/Half-Life Alyx/game/hlvr" folder. 
+In order to play the map you have to download the [XenThug Warehouse.zip](https://github.com/Manello/hla_mod_XenThug/releases/download/warehouse033/XenThug-Warehouse-V1.2.zip) and paste it's content into your "steamapps/Half-Life Alyx/game/hlvr" folder. 
 
 ![ALT TEXT Pasting the content into hlvr](http://cvreleague.eu/wp-content/uploads/2020/04/HowToInstall.png)
 
