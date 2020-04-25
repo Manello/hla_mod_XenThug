@@ -181,11 +181,38 @@ You should be able to buy ammo on this vender now once you are ingame! Of course
 
 Inspiration: Make something like a food vending machine in an office building! This way you can include multiple shops in one if you want to.
 
-### Scripting addon
+### Scripting addon 0.35
 The way to interact with my mod is currently wip, but you can already use certain features. I highly recommend using my CommandStack.Add in general instead of SendToConsole, as it will make sure you are not interfering with my mod.
 
-**Console Command:** In order to run a console command simply make any trigger execute RunScriptCode with the parameter *CommandStack.Add("your console command here")*. It will execute the command as soon as the mod has time for it. (A matter of a few frames at max)
+**Console Command:** In order to run a console command simply make any trigger with the output RunScriptCode with the parameter *CommandStack.Add("your console command here")*. It will execute the command as soon as the mod has time for it. (A matter of a few frames at max)
 
 **Delayed Console Command:** In order to use a delayed console command simply make any trigger execute RunScriptCode with the parameter *CommandStack.Add("TTTTyour command here", COMMAND_DELAYEDCONSOLE)*. TTTT is the time in milliseconds to wait before the command should be executed. Always use 4 digits here, example: *0500sv_cheats 1*, waits 0.5 seconds before it enables cheats.
+
+**Adding Events:** To add events you can simply go to your SpawnTrigger and add a new output RunScriptCode with the parameter *CommandStack.Add("OnWave_OnTrigger 3 myTriggerObject", COMMAND_INTERNAL)*. This will trigger the outputs of your object named myTriggerObject right before wave 3 spawns the enemies. More Examples:
+```
+--------------- [General stuff]
+Trigger the outputs of a gameobject on wave 3:
+CommandStack.Add("OnWave_OnTrigger 3 myTriggerObject", COMMAND_INTERNAL)
+
+Sends a command to the console on wave 15: (Here: Spawns a zombie in front of the player)
+CommandStack.Add("OnWave_Console 15 ent_create npc_zombie", COMMAND_INTERNAL)
+
+--------------- [Features useful for story driven maps]
+Pauses the wave spawning process (Shops are still working)
+CommandStack.Add("OnWave_PauseSoft 5 true", COMMAND_INTERNAL)
+
+Unpauses the wave spawning process
+CommandStack.Add("OnWave_PauseSoft 6 false", COMMAND_INTERNAL)
+
+Stops the full Mod (Nothing related to the mod will work, you have the reinitalize it again)
+CommandStack.Add("OnWave_PauseHard 5 true", COMMAND_INTERNAL)
+
+--------------- [Hooking up your own scripts into this mod]
+Run a custom lua function or code piece on wave 5:
+CommandStack.Add("OnWave_FireFunction 5 myCustomFunction()", COMMAND_INTERNAL)
+
+Run a code piece on wave 7:
+CommandStack.Add("OnWave_FireFunction 7 if MyPolymer >= 100 then; print("You are rich at wave 7!"); end", COMMAND_INTERNAL)
+```
 
 **That's everything you need to know about this mod for this version!**
