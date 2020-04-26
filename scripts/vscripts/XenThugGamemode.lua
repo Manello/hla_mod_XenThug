@@ -75,7 +75,19 @@ function _G.SpawnWave(waveNr)
 			UpdateClassesAmounts[c] = WaveList[waveNr][i]
 
 			for j = 1, WaveList[waveNr][i], 1 do
-				CommandStack.Add("ent_create "..EntEnums[i])
+				combineType = ""
+
+				if EntEnums[i] == "npc_combine_s" then
+					if j < (WaveList[waveNr][i] * 0.2) then
+						combineType = " {model models/characters/combine_soldier_heavy/combine_soldier_heavy.vmdl}"
+					elseif j < (WaveList[waveNr][i] * 0.4) then
+						combineType = " {model models/characters/combine_suppressor/combine_suppressor.vmdl}"
+					elseif j < (WaveList[waveNr][i] * 0.6) then
+						combineType = " {model models/characters/combine_soldier_captain/combine_captain.vmdl}"
+					end
+				end
+
+				CommandStack.Add("ent_create "..EntEnums[i]..combineType)
 				
 				d = d + 1
 				if d > #SpawnLocation then
@@ -83,7 +95,7 @@ function _G.SpawnWave(waveNr)
 				end
 				
 				if DebugEnabled == true then
-					ModDebug("Spawning Enemy: " .. EntEnums[i])
+					ModDebug("Spawning Enemy: " .. EntEnums[i]..combineType)
 				end
 			end
 			
