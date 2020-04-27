@@ -7,32 +7,41 @@
 _G.EntEnums = {
 	"npc_headcrab", "npc_headcrab_armored", "npc_headcrab_black", "npc_headcrab_fast", "npc_headcrab_runner", "???",
 	"npc_zombie", "npc_zombie_blind", "npc_antlion", "???", "npc_fastzombie", "npc_antlionguard",
-	"npc_combine", "npc_combine_s", "npc_manhack", "???", "???", "???"
+	"???", "npc_combine_s", "npc_manhack", "combineVariant_heavy", "combineVariant_suppressor", "combineVariant_captain"
 }
---ATTENTION: Headcrab_Black and Headcrab_Poison load the same NPC type! Do not use npc_headcrab_poison, use black instead
+--ATTENTION: Headcrab_Black and Headcrab_Poison might bug out!
+-- npc_combine_s is the normal grunt variant
  
 --===============================================This table shows the layout of the enmy tables (Careful, some NPCs are broken and can't be used yet!)
 -- Crab		Armor	Poison	???		Runn	Black
 -- Zomb		Jeff	Antlio	???		???		???
--- Comb		CombS	Manhac	???		???		???
+-- ???		Grunt	Manhac	Heavy	Suppr	Captain
+
+-- NOTE: The captain barely moves, so you want to set him into his own spawn group on certain spots
 
 --If someone experiences bad perfomance, this throttles the CPU usage of the mode
 --ATTENTION: The mod still works, but it will lead to bad graphic glitches. Only use if you really need it
 _G.EnablePerformanceMode = false
 
 --Enables Debugging for mappers in VConsole2
-_G.DebugEnabled = true
+_G.DebugEnabled = false
 
 --Polymer the player starts with
 _G.MyPolymer = 5
 
 -- IMPLEMENT OPTION TO DISABLE ENDLESS MDOE; TRIGGER AFTER END; AFTER EACH WAVE; AFTER WAVE X
 
+--Enable a Scoreboard, showing the current score
+_G.UseScoreboard = true
+
+--Enable a Waveboard, showing the current wave
+_G.UseWaveboard = true
+
 --Game will initialize on the InitTrigger (so shops etc work), but waits for the first wave for this time
 _G.StartDelay = 30
 
 --Defines the time in seconds to wait in between each wave before spawning a new one
-_G.WaveDelay = 10.0
+_G.WaveDelay = 20.0
 
 --Difficulty Modifier. This will multiply the health of NPCs
 _G.WaveModifier = 1.0
@@ -41,9 +50,9 @@ _G.WaveModifier = 1.0
 _G.PolymerDropChance = 0.75
 
 --===============================================This table shows the layout of the enmy tables (Careful, some NPCs are broken and can't be used yet!)
--- Crab		Armor	Poison	???		Runner	???
+-- Crab		Armor	Poison	???		Runn	Black
 -- Zomb		Jeff	Antlio	???		???		???
--- Comb		CombS	Manhac	???		???		???
+-- ???		Grunt	Manhac	Heavy	Suppr	Captain
 
 --Defines how many of each enemy type should be in each wave
 _G.WaveList = {
@@ -58,13 +67,17 @@ _G.WaveList = {
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	2, 		1, 		0, 		0, 		0},
+	 0, 	1, 		1, 		0, 		0, 		0},
+	 
+	 {4, 	2, 		1, 		0, 		0, 		0,
+	 1, 	0, 		0, 		0, 		0, 		0,
+	 0, 	0, 		0, 		0, 		0, 		0},
 	 
 	 {4, 	2, 		2, 		0, 		1, 		0,
 	 2, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
-	 {4, 	1, 		1, 		0, 		0, 		0,	--5
+	 {4, 	1, 		1, 		0, 		0, 		0,	
 	 4, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
@@ -82,15 +95,19 @@ _G.WaveList = {
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	3, 		2, 		0, 		0, 		0},
+	 0, 	3, 		1, 		0, 		0, 		0},
 	 
-	 {0, 	0, 		0, 		0, 		0, 		0,	--10
+	 {0, 	0, 		0, 		0, 		0, 		0,	
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	5, 		2, 		0, 		0, 		0},
+	 0, 	4, 		2, 		0, 		0, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,	
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	3, 		0, 		1, 		1, 		0},
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	1, 		9, 		0, 		0, 		0},
+	 0, 	1, 		9, 		1, 		0, 		0},
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		5, 		0, 		0, 		0,
@@ -104,8 +121,8 @@ _G.WaveList = {
 	 8, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
-	 {0, 	0, 		0, 		0, 		0, 		0,	--15
-	 9, 	0, 		0, 		0, 		0, 		0,
+	 {1, 	0, 		0, 		0, 		0, 		0,	
+	 8, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		2, 		0, 		0, 		0},
 	 
 	 {2, 	2, 		2, 		0, 		0, 		0,	
@@ -118,13 +135,25 @@ _G.WaveList = {
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,	
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	6, 		5, 		0, 		0, 		0},
+	 0, 	5, 		5, 		0, 		1, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,	
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	4, 		2, 		0, 		3, 		0},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,	
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	3, 		5, 		5, 		0, 		1},
+	 
+	 {0, 	0, 		0, 		0, 		0, 		0,	
+	 0, 	0, 		0, 		0, 		0, 		0,
+	 0, 	3, 		5, 		2, 		2, 		1},
 }
 
 --===============================================
 
 -- This enables the advanced enemy placing system. With this you can define where which enemies should spawn, and also active and deactive groups on demand
-_G.UseSpawnGroups = true
+_G.UseSpawnGroups = false
 
 _G.SpawnGroup = {
 	Mixed = { Enabled = true,				--Will only use this group when it is enabled
@@ -150,8 +179,8 @@ _G.SpawnGroup = {
 --===============================================
 
 -- Plays these sounds upon WaveSpawn / when the whole wave got killed
-_G.WaveFinishSound = "Example.core_start_oneshot"
-_G.WaveStartSound = "Elevator_Distillery.Mechanism_Broken_Child"
+_G.WaveFinishSound = "HackingSphere.SuccessBeep"
+_G.WaveStartSound = "RollUpDoor.FullOpen"
 
 --===============================================
 

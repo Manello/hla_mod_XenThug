@@ -5,11 +5,13 @@
 
 require "mapdata"
 
-print ("\n\n Initializing Manellos Invasion Mod...")
+print ("\n\n Initializing Manellos XenThug Mod...")
 
 _G.ActivePlayer = Entities:GetLocalPlayer()
 
 _G.NpcList = {}
+--NpcList[1] = { name = "",
+--				 handle = nil}
 
 _G.UPDATE_STEP_CHECK = 0
 _G.UPDATE_STEP_SPAWN = 1
@@ -46,12 +48,16 @@ _G.AlreadyDeletedCorpses = {}
 _G.DelaySeconds = 0
 _G.DelayLastTime = 0
 
-_G.UpdateClasses = {} 
-_G.UpdateClassesAmounts = {}
-
 _G.SpawnLocation = {}
 _G.SpawnGroupContainer = {}	--This container holds the indexes of the SpawnLocation seperated by groups
 _G.SpawnGroupsCompiled = {}
+_G.TotalNpcCounter = 0
+
+_G.Waveboard = {}
+_G.TotalWavesPlayed = 0
+
+_G.PlayerDied = false
+_G.PortedPlayerToMenu = false
 
 _G.Scoreboard = {}
 _G.ScoreForThisRound = 0
@@ -59,7 +65,7 @@ _G.ScoreTotal = 0
 _G.ScorePerKill = {
 	5, 		5, 		20, 	0, 		25, 		20,
 	25, 	0, 		10,		0, 		0, 			0,
-	30, 	30,		10,		0, 		0, 			0
+	30, 	30,		10,		35, 	30, 		35
 }
 
 --PrecacheEntityFromTable("npc_headcrab", 1 , 2)
@@ -79,7 +85,83 @@ _G.COMMAND_DELAYEDCONSOLE = 4	--The first 4 chars have to be digits containing t
 
 _G.ModClock = 0
 
+_G.OnWave = {}
+-- OnWave[WaveNum][ComNum] = {
+--				command = "",
+--				params = ""
+-- }
+
+_G.SoftPause = false
+_G.HardPause = false
+
 --=============================================================================
+
+-- Yo
+function _G.SetSoftPause(is)
+	SoftPause = is
+end
+
+-- Yeh
+function _G.SetHardPause(is)
+	HardPause = is
+end
+
+-- Does all the commands registered for that wave
+function _G.WaveDoInternalCommands(wave)
+	if OnWave[wave] ~= nil then
+		for i = 1, #OnWave[wave], 1 do
+			ExecInternalCommand(OnWave[wave][i])
+		end
+	end
+end
+
+--Trim whitespaces
+function trim(s)
+   return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+-- Executes Internal commands
+function _G.ExecInternalCommand(comObj)
+	if comObj.command == "OnWave_OnTrigger" then		--Fires outputs of the specified entity before wave x
+		local theEnt = Entities:FindByName(Entities:First(), comObj.params)
+		
+		if theEnt == nil then
+			ModDebug("[WARNING]: Could not find entity for internal command")
+			return
+		end
+		
+		theEnt:Trigger()
+		
+	elseif comObj.command == "OnWave_FireFunction" then	--Fires a lua script function before wave x
+		local f = loadstring(comObj.params)
+		f()
+		
+	elseif comObj.command == "OnWave_Console" then		--Sends a command to the console before wave x
+		SendToConsole(comObj.params)
+	
+	elseif comObj.command == "OnWave_PauseSoft" then		--Pauses the Mod before wave x, Shops and passive stuff still works until unpaused
+		if trim(string.lower(comObj.params)) == "true" then
+			SoftPause = true
+		else
+			SoftPause = false
+		end
+	
+	elseif comObj.command == "OnWave_PauseHard" then		--Pauses the Mod before wave x, nothing related to XenThug will work until unpaused
+		if trim(string.lower(comObj.params)) == "true" then
+			HardPause = true
+		else
+			HardPause = false
+		end
+	
+	else
+		ModDebug("[WARNING]: Ignored unknown internal command!")
+		return
+	end
+	
+	if DebugEnabled == true then
+		ModDebug("Executed internal command: " .. comObj.command)
+	end
+end
 
 -- Commando Input
 function _G.CommandStack.Add(theComm, theMode)
@@ -104,6 +186,38 @@ function _G.CommandStack.Exec()
 			if CommandStack.queue[1].mode == COMMAND_CONSOLE then
 				SendToConsole(CommandStack.queue[1].command)
 				table.remove(CommandStack.queue, 1)
+				
+			elseif CommandStack.queue[1].mode == COMMAND_INTERNAL then	--using -1 as the wave will instantly execute the command
+				local ComWords = {}
+				for word in CommandStack.queue[1].command:gmatch("%w+") do table.insert(ComWords, word) end
+				local WaveNum = tonumber(ComWords[2])
+
+				if WaveNum ~= -1 then	--Add execution for wave x
+
+					if OnWave[WaveNum] == nil then
+						OnWave[WaveNum] = {}
+					end
+					
+					OnWave[WaveNum][#OnWave[WaveNum] + 1] = {}
+					OnWave[WaveNum][#OnWave[WaveNum]].command = ComWords[1]
+					if #ComWords > 2 then
+						local paramString = ""
+						for i = 3, #ComWords, 1 do
+							paramString = paramString .. " " .. ComWords[i]
+						end
+						OnWave[WaveNum][#OnWave[WaveNum]].params = paramString
+					else
+						OnWave[WaveNum][#OnWave[WaveNum]].params = ""
+					end
+					
+				else	--Execute now
+					local paramString = ""
+					for i = 3, #ComWords, 1 do
+						paramString = paramString .. " " .. ComWords[i]
+					end
+					local myComObj = {command = ComWords[1], params = paramString}
+					ExecInternalCommand(myComObj)
+				end	
 				
 			elseif CommandStack.queue[1].mode == COMMAND_LUA then
 				local f = loadstring(CommandStack.queue[1].command)
@@ -223,6 +337,7 @@ function _G.InitPreRuntimeObjects()
 	until (currEnt == firstEnt)
 	
 	Scoreboard = Entities:FindAllByName("Scoreboard")
+	Waveboard = Entities:FindAllByName("Waveboard")
 end
 
 --Prints all Entities which are visible in the CURRENT TICK

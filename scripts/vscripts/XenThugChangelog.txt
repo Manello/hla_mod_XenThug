@@ -39,3 +39,13 @@
 
 ===== V0.32 ===== 14.04.2020
 - ADDED: Advanced spawn system with SpawnGroups
+
+===== V0.4 ===== 27.04.2020
+- ADDED: Waveboard
+- ADDED: Combine variants (thx to abbozkir for the tip)
+- ADDED: Respawn menu area support
+- ADDED: Custom buy, so now you can buy e.g. the expansion of a map with polymer
+- ADDED: Event System, you can now register a event to trigger Outputs at Wave X, or call your custom lua function
+- ADDED: Init hookup, now you can add to the mods init by adding code into the mapscript.lua->InitMap()
+- NOTE: you can also place custom functions in the mapscript.lua file, the mod will initialize them once loaded
+- FIXED: Some optimizations
