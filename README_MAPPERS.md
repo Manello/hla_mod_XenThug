@@ -8,9 +8,9 @@ In order to enable this Mod on your custom Map you have to follow 3 simple steps
 Simply copy the included "scripts" folder into your game/hlvr/ folder.
 
 #### Important files for you
-**mapdata.lua** contains basic informations about the gamemode and the waves, everything will be covered here
+**mapdata.lua** contains basic informations about the gamemode and the waves, everything will be covered down below
 
-**mapscript.lua** makes it possible to insert custom scripts and events into this mod, though you will need to understand scripting a bit to use it. All informations needed are included in the file itself.
+**mapscript.lua** makes it possible to insert custom scripts and events into this mod, though you will need to understand scripting a bit to use it. All informations needed are included in the file itself and are only partly documented here.
 
 ### II. **Mod Settings**
 All Settings which are useful for you as a mapper can be found inside the mapdata.lua, this file can be found 
@@ -210,7 +210,7 @@ The way to interact with my mod is currently wip, but you can already use certai
 
 **Delayed Console Command:** In order to use a delayed console command simply make any trigger execute RunScriptCode with the parameter *CommandStack.Add("TTTTyour command here", COMMAND_DELAYEDCONSOLE)*. TTTT is the time in milliseconds to wait before the command should be executed. Always use 4 digits here, example: *0500sv_cheats 1*, waits 0.5 seconds before it enables cheats.
 
-**Adding Events:** To add events you can simply go to your SpawnTrigger and add a new output RunScriptCode with the parameter *CommandStack.Add("OnWave_OnTrigger 3 myTriggerObject", COMMAND_INTERNAL)*. This will trigger the outputs of your object named myTriggerObject right before wave 3 spawns the enemies. More Examples:
+**Adding Events:** To add events you can simply go to your SpawnTrigger and add a new output RunScriptCode with the parameter *CommandStack.Add("OnWave_OnTrigger 3 myTriggerObject", COMMAND_INTERNAL)*. This will trigger the outputs of your object named myTriggerObject right before wave 3 spawns the enemies. More Examples: (Even more examples can be found in mapscript.lua)
 ```
 --------------- [General stuff]
 Trigger the outputs of a gameobject on wave 3:
