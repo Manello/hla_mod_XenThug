@@ -1,4 +1,4 @@
-## [FOR MAPPERS, Version 0.32]
+## [FOR MAPPERS, Version 0.4]
 
 **NOTE: Updated VMap with an example of all features will follow again very soon!**
 
@@ -6,6 +6,11 @@ In order to enable this Mod on your custom Map you have to follow 3 simple steps
 
 ### I. **Files**
 Simply copy the included "scripts" folder into your game/hlvr/ folder.
+
+#### Important files for you
+**mapdata.lua** contains basic informations about the gamemode and the waves, everything will be covered here
+
+**mapscript.lua** makes it possible to insert custom scripts and events into this mod, though you will need to understand scripting a bit to use it. All informations needed are included in the file itself.
 
 ### II. **Mod Settings**
 All Settings which are useful for you as a mapper can be found inside the mapdata.lua, this file can be found 
@@ -46,7 +51,7 @@ In this list you can find multiple blocks of numbers. Each block encolsed in {} 
 ```
 -- 	Crab		ArmorCrab	PoisonCrab	???		RunnCrab	BlackCrab
 --	Zombie		Jeff		Antlion		???		???		???
---	Combine		Combine S	Manhack		???		???		???
+--	???		CombineGrunt	Manhack		CombineHeavy	CombineSuppres	CombineCaptain
 
 --Defines how many of each enemy type should be in each wave
 _G.WaveList = {
@@ -80,7 +85,7 @@ The table below has the same structure as seen in **WaveList**, simply defining 
 ```
 -- 	Crab		ArmorCrab	PoisonCrab	???		RunnCrab	BlackCrab
 --	Zombie		Jeff		Antlion		???		???		???
---	Combine		Combine S	Manhack		???		???		???
+--	???		CombineGrunt	Manhack		CombineHeavy	CombineSuppres	CombineCaptain
 
 _G.SpawnGroup = {
 	Mixed = { Enabled = true,				--Will only use this group when it is enabled
@@ -151,6 +156,10 @@ Now you will have to define where your enemies should spawn. For this you have t
 
 Note: You should leave enough space around each landmark so enemies won't bug into walls or objects. A radius of 40 inches around the spawn is recommended.
 
+##### Respawn menu 0.4
+As of 0.4 you will need to create a info_landmark with the name *PlayerMenu*, upon death the player will get teleported there.
+You can in theory create your own respawn menu there, I recommend placing another scoreboard there, as well as some useable triggers to restart the map, go to the main menu and to quit the game.
+
 *That is it! If you startup your map now it should start spawning the waves you defined. All further steps are optional, but I recommend them to improve your gameplay experience!*
 
 ### Shopsystem & Economy
@@ -180,6 +189,19 @@ You should be able to buy ammo on this vender now once you are ingame! Of course
 ![ALT TEXT An Image of a crappy looking vender](http://cvreleague.eu/wp-content/uploads/2020/04/Unbenannt.png)
 
 Inspiration: Make something like a food vending machine in an office building! This way you can include multiple shops in one if you want to.
+
+### Custom buy functions 0.4
+The custom buy functions will be needed for example for buyable map expansions, thus if you want to create an unlockable room, or make any other trigger purchaseable. You will need to create 3-4 lines of custom scripts to use this feature:
+```
+CanBuyFor(5)		=>This function will return true if the player has at least 5 Polymers in his inventory, otherwise false
+BuyFor(5)		=>This function will return true if it succesfully removed 5 polymers from the players inventory. otherwise false
+
+Example Usage:
+if CanBuyFor(5) == true then
+	BuyFor(5)
+	-- Do your stuff you want to do right here, e.g. disabling a blockade
+end
+```
 
 ### Scripting addon 0.35
 The way to interact with my mod is currently wip, but you can already use certain features. I highly recommend using my CommandStack.Add in general instead of SendToConsole, as it will make sure you are not interfering with my mod.
