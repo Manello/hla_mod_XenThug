@@ -23,6 +23,8 @@ Here is a list of the currently available maps:
 ### [FOR MAPPERS, Version 0.4]
 Please refer to this new readme for mappers: [README_MAPPERS](https://github.com/Manello/hla_mod_XenThug/blob/master/README_MAPPERS.md)
 
+NOTE: The map Warehouse does not always contain the most up-to-date scripts, thus you want to download the scripts folder directly from this repository!
+
 Do you have questions? Reach out to me in Discord! (Manello#1406)
 If you are in general interested in updates for this and my future mods follow me on [Twitter](https://twitter.com/manellomb/)!
 And if you have questions about mapping or modding in general, please join this [Discord](https://discord.gg/Yt86zaG)!
