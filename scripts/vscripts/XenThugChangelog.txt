@@ -49,3 +49,6 @@
 - ADDED: Init hookup, now you can add to the mods init by adding code into the mapscript.lua->InitMap()
 - NOTE: you can also place custom functions in the mapscript.lua file, the mod will initialize them once loaded
 - FIXED: Some optimizations
+
+===== V0.42 ===== 27.04.2020
+- FIXED: Immortal headcrab

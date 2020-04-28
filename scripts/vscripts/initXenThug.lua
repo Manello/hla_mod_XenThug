@@ -59,6 +59,8 @@ _G.TotalWavesPlayed = 0
 _G.PlayerDied = false
 _G.PortedPlayerToMenu = false
 
+_G.WaveIsDead = false
+
 _G.Scoreboard = {}
 _G.ScoreForThisRound = 0
 _G.ScoreTotal = 0

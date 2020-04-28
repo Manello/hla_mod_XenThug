@@ -28,19 +28,6 @@ function _G.Map_BuyBlueKey()
 	end
 end
 
--- Custom function for map Warehouse
-function _G.EmergencyCleanup()
-	local aliveCrabs = Entities:FindAllByClassname("npc_headcrab")
-	for i, crab in ipairs(aliveCrabs) do
-		CommandStack.Add("ent_remove "..tostring(crab:entindex()))
-	end
-
-	ScoreTotal = ScoreTotal - 300
-	
-	SetScore()
-	SetWaveboard ()
-end
-
 -- Executes custom commands on init
 function _G.InitMap()
 	--Put here custom init commands, for example register your per-wave events

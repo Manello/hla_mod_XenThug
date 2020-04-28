@@ -111,8 +111,8 @@ function _G.SetWavePositions()
 		for i = 1, #NpcList, 1 do
 			spawnLocationSelected = ScanGroupsForSpawnLocation(i)
 			
-			NpcList[i].handle:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
-			NpcList[i].handle:SetOrigin(SpawnLocation[d]:GetOrigin())
+			NpcList[i].handle:SetAbsOrigin(spawnLocationSelected:GetAbsOrigin())
+			NpcList[i].handle:SetOrigin(spawnLocationSelected:GetOrigin())
 			NpcList[i].handle:SetHealth(NpcList[i].handle:GetHealth() * WaveModifier)
 		end
 	end
@@ -232,7 +232,7 @@ function _G.CleanupWave()
 	local currEnt = firstEnt
 	
 	repeat
-		if currEnt:GetClassname() == "prop_ragdoll" then
+		if currEnt:GetClassname() == "prop_ragdoll" then	--TO-FIX: Take the preregistered and dont delete them
 			ToDelete[#ToDelete + 1] = currEnt
 		end
 	
@@ -554,34 +554,40 @@ function GamemodeThink()
 								CommandStack.Add("hlvr_heartbeat_enable 0")
 							end
 						
-							if IsWaveAlive() == false then
-								CleanupWave()
-								EmitSoundOn(WaveFinishSound, ActivePlayer)
-
-								UpdateStep = UPDATE_STEP_SPAWN
+							if IsWaveAlive() == false and WaveIsDead == false then
+								DelayStart(WaveDelay)										--Delay needed to avoid immortal headcrab
+								WaveIsDead = true
 								
-								DelayStart(WaveDelay)
+								EmitSoundOn(WaveFinishSound, ActivePlayer)
+								
+								WaveDoInternalCommands(CurrentWave)
+								
+								return FrameTime()
+							end
+							
+							if WaveIsDead == true then
+								CleanupWave()
+							
+								WaveIsDead = false
+								UpdateStep = UPDATE_STEP_SPAWN
 								
 								if UseScoreboard == true then
 									GetNextScore()
 									SetScore()
 								end
 								
-								WaveDoInternalCommands(CurrentWave)
-								
 								if DebugEnabled == true then
 									ModDebug("Wave dead. Cleanup started.")
 								end
 							end
 						else
-							ModDebug("Finished game with a score of "..tostring(ScoreTotal).." in "..tostring(TotalWavesPlayed).." Waves")
-						
 							if PortedPlayerToMenu == false then
+								ModDebug("Finished game with a score of "..tostring(ScoreTotal).." in "..tostring(TotalWavesPlayed).." Waves")
 								local teleportTo = Entities:FindByName(Entities:First(), "PlayerMenu")
 								
-								if 		math.floor(ActivePlayer:GetOrigin().x) ~= math.floor(teleportTo:GetAbsOrigin().x) 
-									or	math.floor(ActivePlayer:GetOrigin().y) ~= math.floor(teleportTo:GetAbsOrigin().y) 
-									or	math.floor(ActivePlayer:GetOrigin().z) ~= math.floor(teleportTo:GetAbsOrigin().z) then
+								if 		(math.abs(ActivePlayer:GetOrigin().x) - math.abs(teleportTo:GetAbsOrigin().x)) > 3 
+									or	(math.abs(ActivePlayer:GetOrigin().y) - math.abs(teleportTo:GetAbsOrigin().y)) > 3
+									or	(math.abs(ActivePlayer:GetOrigin().z) - math.abs(teleportTo:GetAbsOrigin().z)) > 3 then
 									
 									CommandStack.Add("sv_cheats 1")
 									ActivePlayer:SetOrigin(teleportTo:GetOrigin())
