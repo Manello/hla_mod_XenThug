@@ -1,4 +1,4 @@
-# [MOD] Half Life: Alyx - XenThug - 0.43
+# [MOD] Half Life: Alyx - XenThug - 0.44
 A Half Life: Alyx Mod including a classic horde defense gamemode!
 
 You can find the latest Map **Warehouse** featuring a stable release of my Mod right here! Convince yourself and have a look at the **[Trailer](https://www.youtube.com/watch?v=bSvwAgw45H0)**!
@@ -20,7 +20,7 @@ Here is a list of the currently available maps:
 
 - **Your Map?:** You want to create your own map using this Mod? Sure! Go ahead and let me know about it so you can get started :)
 
-### [FOR MAPPERS, Version 0.4]
+### [FOR MAPPERS, Version 0.44]
 Please refer to this new readme for mappers: [README_MAPPERS](https://github.com/Manello/hla_mod_XenThug/blob/master/README_MAPPERS.md)
 
 NOTE: The map Warehouse does not always contain the most up-to-date scripts, thus you want to download the scripts folder directly from this repository!
