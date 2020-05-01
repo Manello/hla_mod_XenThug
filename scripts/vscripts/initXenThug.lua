@@ -52,6 +52,8 @@ _G.SpawnLocation = {}
 _G.SpawnGroupContainer = {}	--This container holds the indexes of the SpawnLocation seperated by groups
 _G.SpawnGroupsCompiled = {}
 _G.TotalNpcCounter = 0
+_G.TotalSquadCounter = 0
+_G.CurrentSquadCounter = 0
 
 _G.Waveboard = {}
 _G.TotalWavesPlayed = 0
@@ -132,7 +134,7 @@ function _G.ExecInternalCommand(comObj)
 			return
 		end
 		
-		theEnt:Trigger()
+		CommandStack.Add("ent_fire_output ".. comObj.params .." ontrigger", COMMAND_CONSOLE)
 		
 	elseif comObj.command == "OnWave_FireFunction" then	--Fires a lua script function before wave x
 		local f = loadstring(comObj.params)
@@ -191,7 +193,7 @@ function _G.CommandStack.Exec()
 				
 			elseif CommandStack.queue[1].mode == COMMAND_INTERNAL then	--using -1 as the wave will instantly execute the command
 				local ComWords = {}
-				for word in CommandStack.queue[1].command:gmatch("%w+") do table.insert(ComWords, word) end
+				for word in CommandStack.queue[1].command:gmatch("[%w_]+") do table.insert(ComWords, word) end
 				local WaveNum = tonumber(ComWords[2])
 
 				if WaveNum ~= -1 then	--Add execution for wave x
@@ -205,9 +207,9 @@ function _G.CommandStack.Exec()
 					if #ComWords > 2 then
 						local paramString = ""
 						for i = 3, #ComWords, 1 do
-							paramString = paramString .. " " .. ComWords[i]
+							paramString = paramString .. ComWords[i] .. " "
 						end
-						OnWave[WaveNum][#OnWave[WaveNum]].params = paramString
+						OnWave[WaveNum][#OnWave[WaveNum]].params = paramString:gsub("^%s*(.-)%s*$", "%1")
 					else
 						OnWave[WaveNum][#OnWave[WaveNum]].params = ""
 					end
@@ -221,9 +223,13 @@ function _G.CommandStack.Exec()
 					ExecInternalCommand(myComObj)
 				end	
 				
+				table.remove(CommandStack.queue, 1)
+				
 			elseif CommandStack.queue[1].mode == COMMAND_LUA then
 				local f = loadstring(CommandStack.queue[1].command)
 				f()
+				
+				table.remove(CommandStack.queue, 1)
 				
 			elseif CommandStack.queue[1].mode == COMMAND_DELAYEDCONSOLE then
 				CommandStack.delayedComActive = true

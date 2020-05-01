@@ -52,3 +52,11 @@
 
 ===== V0.42 ===== 27.04.2020
 - FIXED: Immortal headcrab
+- FIXED: A movement bug in the spawn menu
+
+===== V0.43 ===== 27.04.2020
+- FIXED: Spawn Groups had a problem
+
+===== V0.44 ===== 01.05.2020
+- FIXED: OnWave_OnTrigger would sometimes not work
+- ADDED: Internal Squad System, this will improve the attacking coordination of enemies

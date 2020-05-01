@@ -63,9 +63,9 @@ function _G.SpawnWave(waveNr)
 				end	
 				
 				if modelString == "" then
-					CommandStack.Add("ent_create "..EntEnums[i].." {\"targetname\" \""..npcString.."\"}")
+					CommandStack.Add("ent_create "..EntEnums[i].." {\"targetname\" \""..npcString.."\" \"squadname\" \"".."XTS"..tostring(TotalSquadCounter).."\"}")
 				else
-					CommandStack.Add("ent_create ".."npc_combine_s".." {\"targetname\" \""..npcString.."\" \"model\" "..modelString.."\"}")
+					CommandStack.Add("ent_create ".."npc_combine_s".." {\"targetname\" \""..npcString.."\" \"model\" "..modelString.."\" \"squadname\" \"".."XTS"..tostring(TotalSquadCounter).."\"}")
 				end
 				
 				NpcList[#NpcList + 1] = {name = npcString, handle = nil}
@@ -74,6 +74,12 @@ function _G.SpawnWave(waveNr)
 				d = d + 1
 				if d > #SpawnLocation then
 					d = 1
+				end
+				
+				CurrentSquadCounter = CurrentSquadCounter + 1
+				if CurrentSquadCounter > 15 then 
+					CurrentSquadCounter = 0
+					TotalSquadCounter = TotalSquadCounter + 1
 				end
 				
 				if DebugEnabled == true then
