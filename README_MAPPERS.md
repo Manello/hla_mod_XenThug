@@ -1,4 +1,4 @@
-## [FOR MAPPERS, Version 0.4]
+## [FOR MAPPERS, Version 0.45]
 
 **NOTE: Updated VMap with an example of all features will follow again very soon!**
 
@@ -26,6 +26,22 @@ Shows useful information for mappers in the VConsole2. You should disable this u
 The amount of Polymer the player will start with. 
 
 ATTENTION: You are allowed to place Polymers on the map in Hammer, but DO NOT spawn them with your custom scripts(including impulse 101)! This will corrupt XenThug's economy system and leads to a bad player experience! Also, do not set the initial polymers through the info_player_equip class! Use MyPolymers in mapdata.lua instead.
+
+
+##### **[UseScoreboard]**
+If enabled the mod will start scanning for scoreboards. A scoreboard is simply an "point_worldtext" entity and has the name "Scoreboard". You can create as many scoreboards as you like, they will get updated after each wave. It only shows the current score of the player.
+
+##### **[UseWaveboard]**
+If enabled the mod will start scanning for waveboards. A waveboard is simply an "point_worldtext" entity and has the name "Waveboard". You can create as many waveboards as you like, they will get updated after each wave.
+
+##### **[UseWavetimer]**
+If enabled the mod will start scanning for wavetimers. A wavetimer is simply an "point_worldtext" entity and has the name "Wavetimer". You can create as many wavetimers as you like, they will show the time left until the next wave spawns.
+
+##### **[WavetimerStyle]**
+Defines the stlye for the number the wavetimer shows. It can be either "INT" to round the numbers up, or "DEC_X", where you can place X with any number representing the number of digitals after the commata. (e.g. DEC_3 will result in 5.345)
+
+##### **[WavetimerOnStart]**
+If this is set to true, the Wavetimer will already show the countdown for the StartDelay.
 
 ##### **[StartDelay]**
 The time the player will have to explore the level before the first wave arrives
