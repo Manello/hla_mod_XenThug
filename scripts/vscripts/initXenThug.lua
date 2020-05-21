@@ -18,6 +18,8 @@ _G.UPDATE_STEP_SPAWN = 1
 _G.UPDATE_STEP_REGISTER = 2
 _G.UPDATE_DELAY_INIT = 3
 
+_G.MAX_TIME_AS_RAGDOLL = 5		--Time for npcs as a ragdoll before they are declared as dead
+
 _G.PolymerSpawnedTotal = 0
 _G.PolymerTakenTotal = 0
 _G.UpdateBoughtSomething = {}
@@ -58,10 +60,14 @@ _G.CurrentSquadCounter = 0
 _G.Waveboard = {}
 _G.TotalWavesPlayed = 0
 
+_G.Wavetimer = {}
+_G.FirstWaveSpawned = false
+
 _G.PlayerDied = false
 _G.PortedPlayerToMenu = false
 
 _G.WaveIsDead = false
+_G.DoubleCheckAlive = 0
 
 _G.Scoreboard = {}
 _G.ScoreForThisRound = 0
@@ -346,6 +352,7 @@ function _G.InitPreRuntimeObjects()
 	
 	Scoreboard = Entities:FindAllByName("Scoreboard")
 	Waveboard = Entities:FindAllByName("Waveboard")
+	Wavetimer = Entities:FindAllByName("Wavetimer")
 end
 
 --Prints all Entities which are visible in the CURRENT TICK
@@ -367,6 +374,10 @@ end
 function _G.DelayStart(secs)
 	DelaySeconds = secs
 	DelayLastTime = ModClock
+	
+	if DebugEnabled == true then
+		ModDebug("Started Delay with "..tostring(secs).." seconds")
+	end
 end
 
 --Returns true if the Delay is still active
@@ -396,6 +407,16 @@ function _G.TimeInSeconds()
 	return (LocalTime().Seconds + LocalTime().Minutes * 60 + LocalTime().Hours * 60 * 60)
 end
 
+--Toggles Debug mode from Console
+function _G.ToggleDebug()
+	DebugEnabled = not DebugEnabled
+	if DebugEnabled == true then
+		ModDebug("Debugging is now enabled!")
+	else
+		ModDebug("Debugging is now disabled!")
+	end
+end
+
 --=============================================================================
 InitPreRuntimeObjects()
 
@@ -406,9 +427,12 @@ require "XenThugGamemode"
 require "mapscript"
 
 ActivePlayer:SetThink(GamemodeThink, "xenthug_think", 0)
+
 ListenToGameEvent("player_drop_resin_in_backpack", Event_PolymerPickedUp, nil)
 ListenToGameEvent("player_eject_clip", Event_ClipGameWorkaround, nil)
 ListenToGameEvent("player_retrieved_backpack_clip", Event_ClipGameWorkaround, nil)
 ListenToGameEvent("player_pistol_clip_inserted", Event_ClipGameWorkaround, nil)
+
+Convars:RegisterCommand("xt_debug", ToggleDebug, "Toggles the debug mode for XenThug", 0)
 
 print ("Invasion Init done!")

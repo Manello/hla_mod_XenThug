@@ -37,11 +37,20 @@ _G.UseScoreboard = true
 --Enable a Waveboard, showing the current wave
 _G.UseWaveboard = true
 
+--Enables a countdown in between each wave
+_G.UseWavetimer = false
+
+--Style of the Wavetimer, INT or DEC (Integer or with X Decimals, max 9
+_G.WavetimerStyle = "INT"	--Or use "DEC_3", where 3 can be replaced with the number of decimals
+
+--Enables the Wavetimer during the StartDelay
+_G.WavetimerOnStart = false
+
 --Game will initialize on the InitTrigger (so shops etc work), but waits for the first wave for this time
-_G.StartDelay = 30
+_G.StartDelay = 50
 
 --Defines the time in seconds to wait in between each wave before spawning a new one
-_G.WaveDelay = 20.0
+_G.WaveDelay = 30	
 
 --Difficulty Modifier. This will multiply the health of NPCs
 _G.WaveModifier = 1.0
@@ -57,11 +66,11 @@ _G.PolymerDropChance = 0.75
 --Defines how many of each enemy type should be in each wave
 _G.WaveList = {
 	
-	{5, 	0, 		0, 		0, 		0, 		0,
+	{4, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
-	 {6, 	1,		0,		0, 		0, 		0,
+	 {5, 	1,		0,		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
@@ -69,7 +78,7 @@ _G.WaveList = {
 	 0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	1, 		1, 		0, 		0, 		0},
 	 
-	 {4, 	2, 		1, 		0, 		0, 		0,
+	 {3, 	2, 		1, 		0, 		0, 		0,
 	 1, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0},
 	 
@@ -95,15 +104,15 @@ _G.WaveList = {
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	3, 		1, 		0, 		0, 		0},
+	 0, 	2, 		1, 		0, 		0, 		0},
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,	
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	4, 		2, 		0, 		0, 		0},
+	 0, 	3, 		2, 		0, 		0, 		0},
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,	
 	 0, 	0, 		0, 		0, 		0, 		0,
-	 0, 	3, 		0, 		1, 		1, 		0},
+	 0, 	2, 		0, 		1, 		1, 		0},
 	 
 	 {0, 	0, 		0, 		0, 		0, 		0,
 	 0, 	0, 		0, 		0, 		0, 		0,

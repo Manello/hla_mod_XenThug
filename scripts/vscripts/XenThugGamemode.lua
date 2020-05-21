@@ -44,7 +44,11 @@ end
 
 --Yup
 function _G.SpawnWave(waveNr)
-	NpcList = {}
+	local cnt = #NpcList
+	for i = 1, cnt, 1 do
+		NpcList[#NpcList] = nil
+	end
+	
 	local c = 1
 	local d = 1
 	for i = 1, #WaveList[waveNr], 1 do
@@ -68,7 +72,7 @@ function _G.SpawnWave(waveNr)
 					CommandStack.Add("ent_create ".."npc_combine_s".." {\"targetname\" \""..npcString.."\" \"model\" "..modelString.."\" \"squadname\" \"".."XTS"..tostring(TotalSquadCounter).."\"}")
 				end
 				
-				NpcList[#NpcList + 1] = {name = npcString, handle = nil}
+				NpcList[#NpcList + 1] = {name = npcString, handle = nil, checkIfAlive = false, ragdollTimeout = 0}
 				TotalNpcCounter = TotalNpcCounter + 1
 				
 				d = d + 1
@@ -96,6 +100,14 @@ end
 function _G.SetWavePositions()
 	if UseSpawnGroups ~= true then	--Old simple system
 		local d = 1
+		
+		if DebugEnabled == true then
+			for i = 1, #NpcList, 1 do
+				ModDebug("Set position of: "..NpcList[i].name)
+			end
+		end
+		
+		
 		for i = 1, #NpcList, 1 do
 			NpcList[i].handle:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
 			NpcList[i].handle:SetOrigin(SpawnLocation[d]:GetOrigin())
@@ -122,6 +134,7 @@ function _G.SetWavePositions()
 			NpcList[i].handle:SetHealth(NpcList[i].handle:GetHealth() * WaveModifier)
 		end
 	end
+	CommandStack.Add("0500create_flashlight", COMMAND_DELAYEDCONSOLE)	--This is not for a flashlight, but it forces the game to update enemies positions
 end
 
 -- Enables or disables a SpawnGroup
@@ -223,13 +236,54 @@ function _G.IsWaveAlive()
 	for i, npc in ipairs(NpcList) do
 		local npcLookup = Entities:FindByName(Entities:First(), npc.name)
 		if npcLookup ~= nil then
-			if npcLookup:GetClassname() ~= "prop_ragdoll" then
-				return true
+			if npcLookup:GetClassname() == "prop_ragdoll" and npc.checkIfAlive == false then
+				npc.checkIfAlive = true
+				npc.ragdollTimeout = ModClock
+
+			elseif npc.checkIfAlive == false then
+				if npcLookup:GetHealth() > 0 then
+					return true
+				else
+					table.remove(NpcList, i)
+					return true
+				end
 			end
 		end
 	end
 	
-	return false
+	local oneAlive = false
+	--CheckAlive is for headcrabs, they temporary turn into ragdolls while jumping
+	for i, npc in ipairs(NpcList) do
+		if npc.checkIfAlive == true then
+			--print("Perfoming Alive Check for ", npc.name)
+			local npcLookup = Entities:FindByName(Entities:First(), npc.name)
+			if npcLookup == nil then
+				if DebugEnabled == true then
+					ModDebug("ATTENTION: Entity checked for death is nil!")
+				end
+			else
+				if npcLookup:GetClassname() ~= "prop_ragdoll" then
+					npc.checkIfAlive = false
+					npc.ragdollTimeout = 0
+					return true
+				end
+			
+				if (ModClock - npc.ragdollTimeout) > MAX_TIME_AS_RAGDOLL then
+					table.remove(NpcList, i)
+				else
+					oneAlive = true
+				end
+			end
+		end
+	end
+	
+	if DebugEnabled == true then
+		if oneAlive == false then
+			ModDebug("Wave is dead!")
+		end
+	end
+	
+	return oneAlive
 end
 
 -- Mark Entities for Deletion (1 delete per tick)
@@ -400,6 +454,7 @@ end
 function _G.BuyFor(amount)
 	if MyPolymer >= amount then
 		MyPolymer = MyPolymer - amount
+		CommandStack.Add("hlvr_addresources 0 0 0 -"..tostring(amount), COMMAND_CONSOLE)
 		return true
 	else
 		if DebugEnabled == true then
@@ -455,6 +510,22 @@ end
 function _G.SetWaveboard ()
 	for i, board in ipairs(Waveboard) do
 		board:SetMessage("Wave\n"..tostring(TotalWavesPlayed))
+	end
+end
+
+-- Sets the time until next wave on all wavetimers
+function _G.SetWavetimer (t)
+	local timeString = ""
+	if WavetimerStyle == "INT" then
+		timeString = tostring(math.ceil(t))
+	else
+		local myDecimals = tonumber(string.sub(WavetimerStyle, -1, -1))
+		local power = math.pow(10, myDecimals)
+		timeString = tostring(math.floor(t*power)/power)
+	end
+	
+	for i, timer in ipairs(Wavetimer) do
+		timer:SetMessage(timeString)
 	end
 end
 
@@ -526,6 +597,7 @@ function GamemodeThink()
 							end
 							
 						elseif UpdateStepTimer == 20 then
+						
 							UpdateStepTimer = 0
 							UpdateStep = UPDATE_STEP_SPAWN
 							DelayStart(StartDelay)
@@ -623,6 +695,8 @@ function GamemodeThink()
 						
 						SpawnWave(CurrentWave)
 						
+						FirstWaveSpawned = true
+						
 						CurrentWave = CurrentWave + 1
 						if CurrentWave > #WaveList then
 							CurrentWave = 1
@@ -640,6 +714,16 @@ function GamemodeThink()
 							UpdateStep = UPDATE_STEP_CHECK
 						end
 					end
+				end
+			end
+			
+			if FirstWaveSpawned == false then
+				if UseWavetimer == true and WavetimerOnStart == true then
+					SetWavetimer(DelaySeconds)
+				end
+			else
+				if UseWavetimer == true then
+					SetWavetimer(DelaySeconds)
 				end
 			end
 		end

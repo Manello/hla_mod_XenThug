@@ -60,3 +60,7 @@
 ===== V0.44 ===== 01.05.2020
 - FIXED: OnWave_OnTrigger would sometimes not work
 - ADDED: Internal Squad System, this will improve the attacking coordination of enemies
+
+===== V0.45 ===== 21.05.2020
+- ADDED: Wave timer
+- FIXED: Multiple problems with the official workshop
