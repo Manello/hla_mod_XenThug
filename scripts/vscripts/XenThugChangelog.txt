@@ -64,3 +64,6 @@
 ===== V0.45 ===== 21.05.2020
 - ADDED: Wave timer
 - FIXED: Multiple problems with the official workshop
+
+===== V0.46 ===== 30.05.2020
+- FIXED: Bug where enemies will always start spawning in front of you (FINALLY!)

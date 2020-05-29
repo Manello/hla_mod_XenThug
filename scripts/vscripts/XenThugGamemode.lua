@@ -31,6 +31,7 @@ function _G.HasWaveSpawned()
 				return false
 			else
 				NpcList[i].handle = npcLookup
+				NpcList[i].handle:SetHealth(NpcList[i].handle:GetHealth() * WaveModifier)
 				
 				if DebugEnabled == true then
 					ModDebug("Registered Enemy: "..npcLookup:GetName().." "..npcLookup:GetClassname().." "..npcLookup:GetModelName())
@@ -44,6 +45,8 @@ end
 
 --Yup
 function _G.SpawnWave(waveNr)
+	SpawnGenerationArray = nil
+	_G.SpawnGenerationArray = {}
 	local cnt = #NpcList
 	for i = 1, cnt, 1 do
 		NpcList[#NpcList] = nil
@@ -67,9 +70,22 @@ function _G.SpawnWave(waveNr)
 				end	
 				
 				if modelString == "" then
-					CommandStack.Add("ent_create "..EntEnums[i].." {\"targetname\" \""..npcString.."\" \"squadname\" \"".."XTS"..tostring(TotalSquadCounter).."\"}")
+					SpawnGenerationArray[#SpawnGenerationArray + 1] = {}
+					SpawnGenerationArray[#SpawnGenerationArray].classname = EntEnums[i]
+					SpawnGenerationArray[#SpawnGenerationArray].targetname = npcString
+					SpawnGenerationArray[#SpawnGenerationArray].model = ""
+					SpawnGenerationArray[#SpawnGenerationArray].squadname = "XTS"..tostring(TotalSquadCounter)
+					SpawnGenerationArray[#SpawnGenerationArray].scales = "1.0 1.0 1.0"
+					SpawnGenerationArray[#SpawnGenerationArray].angles = "0.0 0.0 0.0"
 				else
-					CommandStack.Add("ent_create ".."npc_combine_s".." {\"targetname\" \""..npcString.."\" \"model\" "..modelString.."\" \"squadname\" \"".."XTS"..tostring(TotalSquadCounter).."\"}")
+					SpawnGenerationArray[#SpawnGenerationArray + 1] = {}
+					SpawnGenerationArray[#SpawnGenerationArray].classname = "npc_combine_s"
+					SpawnGenerationArray[#SpawnGenerationArray].targetname = npcString
+					SpawnGenerationArray[#SpawnGenerationArray].squadname = "XTS"..tostring(TotalSquadCounter)
+					SpawnGenerationArray[#SpawnGenerationArray].model = modelString
+					SpawnGenerationArray[#SpawnGenerationArray].scales = "1.0 1.0 1.0"
+					SpawnGenerationArray[#SpawnGenerationArray].angles = "0.0 0.0 0.0"
+					--"ent_create ".."npc_combine_s".." {\"targetname\" \""..npcString.."\" \"model\" "..modelString.."\" \"squadname\" \"".."XTS"..tostring(TotalSquadCounter).."\"}"
 				end
 				
 				NpcList[#NpcList + 1] = {name = npcString, handle = nil, checkIfAlive = false, ragdollTimeout = 0}
@@ -94,6 +110,8 @@ function _G.SpawnWave(waveNr)
 			c = c + 1
 		end
 	end	
+	
+	SetWavePositions()
 end
 
 --Sets Wave Positions and Difficulty
@@ -107,12 +125,24 @@ function _G.SetWavePositions()
 			end
 		end
 		
-		
-		for i = 1, #NpcList, 1 do
-			NpcList[i].handle:SetAbsOrigin(SpawnLocation[d]:GetAbsOrigin())
-			NpcList[i].handle:SetOrigin(SpawnLocation[d]:GetOrigin())
-			NpcList[i].handle:SetHealth(NpcList[i].handle:GetHealth() * WaveModifier)
+		local spawnLoc = {}
+		local spawnClass = ""
+		for i = 1, #SpawnGenerationArray, 1 do
+			spawnLoc = SpawnLocation[d]:GetOrigin()
+			SpawnGenerationArray[i].origin = tostring(spawnLoc.x).." "..tostring(spawnLoc.y).." "..tostring(spawnLoc.z)
 			
+			if SpawnGenerationArray[i].model == "" then
+			CommandStack.Add("ent_create "..SpawnGenerationArray[i].classname..
+											" {\"origin\" \""..SpawnGenerationArray[i].origin.."\""..
+											" \"targetname\" \""..SpawnGenerationArray[i].targetname.."\""..
+											" \"squadname\" \""..SpawnGenerationArray[i].squadname.."\"}")
+			else
+			CommandStack.Add("ent_create "..SpawnGenerationArray[i].classname..
+											" {\"origin\" "..SpawnGenerationArray[i].origin..
+											" \"targetname\" \""..SpawnGenerationArray[i].targetname.."\""..
+											" \"model\" \""..SpawnGenerationArray[i].model.."\""..
+											" \"squadname\" \""..SpawnGenerationArray[i].squadname.."\"}")
+			end
 			d = d + 1
 			if d > #SpawnLocation then
 				d = 1
@@ -708,7 +738,6 @@ function GamemodeThink()
 					elseif UpdateStep == UPDATE_STEP_REGISTER then
 						
 						if HasWaveSpawned() == true then
-							SetWavePositions()
 							EmitSoundOn(WaveStartSound, ActivePlayer)
 							
 							UpdateStep = UPDATE_STEP_CHECK
