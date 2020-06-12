@@ -67,3 +67,11 @@
 
 ===== V0.46 ===== 30.05.2020
 - FIXED: Bug where enemies will always start spawning in front of you (FINALLY!)
+
+===== V0.47 ===== 30.05.2020
+- FIXED: Bug where Polymers would drop where you are looking
+- FIXED: Bug where Polymers would get teleported around the map sometimes
+- FIXED: Bug where shopitems would spawn where you are looking at before getting teleported into a vender
+- FIXED: Bug where sometimes a wave would be declared dead altough one enemy was still alive (Known Bug: The Headcrab dropped from a zombie is not counted as an enemy)
+- FIXED: Spawning Enemies was not working when using the advanced grouping system since 0.46
+- FIXED: Bug where sometimes no further waves would spawn

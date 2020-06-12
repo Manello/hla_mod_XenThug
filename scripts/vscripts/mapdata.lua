@@ -47,10 +47,10 @@ _G.WavetimerStyle = "INT"	--Or use "DEC_3", where 3 can be replaced with the num
 _G.WavetimerOnStart = false
 
 --Game will initialize on the InitTrigger (so shops etc work), but waits for the first wave for this time
-_G.StartDelay = 50
+_G.StartDelay = 45
 
 --Defines the time in seconds to wait in between each wave before spawning a new one
-_G.WaveDelay = 30	
+_G.WaveDelay = 30
 
 --Difficulty Modifier. This will multiply the health of NPCs
 _G.WaveModifier = 1.0

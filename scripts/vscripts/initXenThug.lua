@@ -18,7 +18,7 @@ _G.UPDATE_STEP_SPAWN = 1
 _G.UPDATE_STEP_REGISTER = 2
 _G.UPDATE_DELAY_INIT = 3
 
-_G.MAX_TIME_AS_RAGDOLL = 5		--Time for npcs as a ragdoll before they are declared as dead
+_G.MAX_TIME_AS_RAGDOLL = 10		--Time for npcs as a ragdoll before they are declared as dead
 
 _G.PolymerSpawnedTotal = 0
 _G.PolymerTakenTotal = 0
@@ -50,6 +50,7 @@ _G.AlreadyDeletedCorpses = {}
 _G.DelaySeconds = 0
 _G.DelayLastTime = 0
 
+_G.SpawnGenerationArray = {}
 _G.SpawnLocation = {}
 _G.SpawnGroupContainer = {}	--This container holds the indexes of the SpawnLocation seperated by groups
 _G.SpawnGroupsCompiled = {}
@@ -276,6 +277,16 @@ end
 -- Outputs a Mod debug message
 function _G.ModDebug(str)
 	print("[MOD][XenThug]: " .. str)
+end
+
+-- Outputs a Mod warning message
+function _G.ModWarn(str)
+	print("[MOD][XenThug][WARNING]: " .. str)
+end
+
+-- Outputs a Mod error message
+function _G.ModError(str)
+	print("[MOD][XenThug][ERROR]: " .. str)
 end
 
 -- Assigns a SpawnLocation to a SpawnGroup, checks before if the SpawnGroup exists

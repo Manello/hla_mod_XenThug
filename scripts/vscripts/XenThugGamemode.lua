@@ -88,7 +88,13 @@ function _G.SpawnWave(waveNr)
 					--"ent_create ".."npc_combine_s".." {\"targetname\" \""..npcString.."\" \"model\" "..modelString.."\" \"squadname\" \"".."XTS"..tostring(TotalSquadCounter).."\"}"
 				end
 				
-				NpcList[#NpcList + 1] = {name = npcString, handle = nil, checkIfAlive = false, ragdollTimeout = 0}
+				NpcList[#NpcList + 1] = {name = npcString, 
+										 handle = nil, 
+										 classname = SpawnGenerationArray[#SpawnGenerationArray].classname,
+										 checkIfAlive = false, 
+										 ragdollTimeout = 0, 
+										 isAlive = true}
+										 
 				TotalNpcCounter = TotalNpcCounter + 1
 				
 				d = d + 1
@@ -114,6 +120,22 @@ function _G.SpawnWave(waveNr)
 	SetWavePositions()
 end
 
+--Spawns one entity from the generation array
+function _G.SpawnFromGenerationArray(index)
+	if SpawnGenerationArray[index].model == "" then
+		CommandStack.Add("ent_create "..SpawnGenerationArray[index].classname..
+									" {\"origin\" \""..SpawnGenerationArray[index].origin.."\""..
+									" \"targetname\" \""..SpawnGenerationArray[index].targetname.."\""..
+									" \"squadname\" \""..SpawnGenerationArray[index].squadname.."\"}")
+	else
+		CommandStack.Add("ent_create "..SpawnGenerationArray[index].classname..
+									" {\"origin\" "..SpawnGenerationArray[index].origin..
+									" \"targetname\" \""..SpawnGenerationArray[index].targetname.."\""..
+									" \"model\" \""..SpawnGenerationArray[index].model.."\""..
+									" \"squadname\" \""..SpawnGenerationArray[index].squadname.."\"}")
+	end
+end
+
 --Sets Wave Positions and Difficulty
 function _G.SetWavePositions()
 	if UseSpawnGroups ~= true then	--Old simple system
@@ -131,18 +153,8 @@ function _G.SetWavePositions()
 			spawnLoc = SpawnLocation[d]:GetOrigin()
 			SpawnGenerationArray[i].origin = tostring(spawnLoc.x).." "..tostring(spawnLoc.y).." "..tostring(spawnLoc.z)
 			
-			if SpawnGenerationArray[i].model == "" then
-			CommandStack.Add("ent_create "..SpawnGenerationArray[i].classname..
-											" {\"origin\" \""..SpawnGenerationArray[i].origin.."\""..
-											" \"targetname\" \""..SpawnGenerationArray[i].targetname.."\""..
-											" \"squadname\" \""..SpawnGenerationArray[i].squadname.."\"}")
-			else
-			CommandStack.Add("ent_create "..SpawnGenerationArray[i].classname..
-											" {\"origin\" "..SpawnGenerationArray[i].origin..
-											" \"targetname\" \""..SpawnGenerationArray[i].targetname.."\""..
-											" \"model\" \""..SpawnGenerationArray[i].model.."\""..
-											" \"squadname\" \""..SpawnGenerationArray[i].squadname.."\"}")
-			end
+			SpawnFromGenerationArray(i)
+			
 			d = d + 1
 			if d > #SpawnLocation then
 				d = 1
@@ -156,15 +168,13 @@ function _G.SetWavePositions()
 			SpawnGroupIsFull[k] = false
 		end
 		
-		for i = 1, #NpcList, 1 do
+		for i = 1, #SpawnGenerationArray, 1 do
 			spawnLocationSelected = ScanGroupsForSpawnLocation(i)
+			SpawnGenerationArray[i].origin = tostring(spawnLocationSelected:GetOrigin().x).." "..tostring(spawnLocationSelected:GetOrigin().y).." "..tostring(spawnLocationSelected:GetOrigin().z)
 			
-			NpcList[i].handle:SetAbsOrigin(spawnLocationSelected:GetAbsOrigin())
-			NpcList[i].handle:SetOrigin(spawnLocationSelected:GetOrigin())
-			NpcList[i].handle:SetHealth(NpcList[i].handle:GetHealth() * WaveModifier)
+			SpawnFromGenerationArray(i)
 		end
 	end
-	CommandStack.Add("0500create_flashlight", COMMAND_DELAYEDCONSOLE)	--This is not for a flashlight, but it forces the game to update enemies positions
 end
 
 -- Enables or disables a SpawnGroup
@@ -264,56 +274,65 @@ end
 --Yo
 function _G.IsWaveAlive()
 	for i, npc in ipairs(NpcList) do
-		local npcLookup = Entities:FindByName(Entities:First(), npc.name)
-		if npcLookup ~= nil then
-			if npcLookup:GetClassname() == "prop_ragdoll" and npc.checkIfAlive == false then
-				npc.checkIfAlive = true
-				npc.ragdollTimeout = ModClock
-
-			elseif npc.checkIfAlive == false then
-				if npcLookup:GetHealth() > 0 then
+		local npcLookup = Entities:FindAllByName(npc.name)
+		
+		if npc.handle ~= nil and #npcLookup > 0 then 
+			if #npcLookup == 1 then
+				--print(npc.handle)
+				if npcLookup[1]:GetClassname() == npc.classname then
 					return true
 				else
+					DoPolymerEconomy(npcLookup[1])
 					table.remove(NpcList, i)
 					return true
-				end
-			end
-		end
-	end
-	
-	local oneAlive = false
-	--CheckAlive is for headcrabs, they temporary turn into ragdolls while jumping
-	for i, npc in ipairs(NpcList) do
-		if npc.checkIfAlive == true then
-			--print("Perfoming Alive Check for ", npc.name)
-			local npcLookup = Entities:FindByName(Entities:First(), npc.name)
-			if npcLookup == nil then
-				if DebugEnabled == true then
-					ModDebug("ATTENTION: Entity checked for death is nil!")
 				end
 			else
-				if npcLookup:GetClassname() ~= "prop_ragdoll" then
-					npc.checkIfAlive = false
-					npc.ragdollTimeout = 0
+				if npcLookup[1]:GetClassname() == "prop_ragdoll" and npcLookup[2]:GetClassname() == npc.classname then
+					return true
+				elseif npcLookup[2]:GetClassname() == "prop_ragdoll" and npcLookup[1]:GetClassname() == npc.classname then
+					return true
+				else
+					table.remove(NpcList, i)
 					return true
 				end
-			
-				if (ModClock - npc.ragdollTimeout) > MAX_TIME_AS_RAGDOLL then
-					table.remove(NpcList, i)
-				else
-					oneAlive = true
-				end
 			end
+		else
+			table.remove(NpcList, i)
+			return true
 		end
 	end
+	
+	--local oneAlive = false
+	--CheckAlive is for headcrabs, they temporary turn into ragdolls while jumping
+	-- for i, npc in ipairs(NpcList) do
+		-- if npc.checkIfAlive == true then
+			--print("Perfoming Alive Check for ", npc.name)
+			-- local npcLookup = Entities:FindByName(Entities:First(), npc.name)
+			-- if npcLookup == nil then
+				-- if DebugEnabled == true then
+					-- ModDebug("ATTENTION: Entity checked for death is nil!")
+				-- end
+			-- else
+				-- if npcLookup:GetClassname() ~= "prop_ragdoll" then
+					-- npc.checkIfAlive = false
+					-- npc.ragdollTimeout = 0
+					-- return true
+				-- end
+			
+				-- if (ModClock - npc.ragdollTimeout) > MAX_TIME_AS_RAGDOLL then
+					-- table.remove(NpcList, i)
+				-- else
+					-- oneAlive = true
+				-- end
+			-- end
+		-- end
+	-- end
 	
 	if DebugEnabled == true then
-		if oneAlive == false then
-			ModDebug("Wave is dead!")
-		end
+		ModDebug("Wave is dead!")
 	end
 	
-	return oneAlive
+	return false
 end
 
 -- Mark Entities for Deletion (1 delete per tick)
@@ -333,27 +352,50 @@ function _G.CleanupWave()
 	until (currEnt == firstEnt)
 end
 
--- Gets Killed Ents and registers their corpses
+-- Gets Killed Ents and registers their corpses  
 function _G.GetRecentKills()
-	local corpseList = Entities:FindAllByClassname("prop_ragdoll")
+	local corpseList = {}
 	local killedEnts = {}
 	local isFreshKill = true
 	
-	for c = 1, #corpseList, 1 do
-		isFreshKill = true
-		if corpseList[c]:IsAlive() == false then
-			--See if the corpe is Deco/Or already used as a polymer spawn
-			for i, ent in ipairs(AlreadySetCorpses) do
-				if ent == corpseList[c] then
-					isFreshKill = false
-					break
+	for i, npc in ipairs(NpcList) do
+		if npc.isAlive == true then
+			corpseList = Entities:FindAllByName(npc.name)
+			--print ("Corpse len:", #corpseList)
+			--print(npc.name)
+			if #corpseList == 0 then		
+			--Died and got divided, have to check possible ragdolls now (The ragdoll detection relies on the fact that hopefully never more than one enemy dies in one frame, otherwise it misses on polymer drop)
+				corpseList = Entities:FindAllByClassname("prop_ragdoll")
+				npc.isAlive = false
+				for c = 1, #corpseList, 1 do 
+					isFreshKill = true
+					if corpseList[c]:IsAlive() == false then
+						for n, ent in ipairs(AlreadySetCorpses) do
+							if ent == corpseList[c] then
+								isFreshKill = false
+								break
+							end
+						end
+						
+						if isFreshKill == true then
+							killedEnts[#killedEnts + 1] = corpseList[c]
+							AlreadySetCorpses[#AlreadySetCorpses + 1] = corpseList[c]
+							
+							for n = 1, #corpseList, 1 do 
+								if corpseList[n] ~= AlreadySetCorpses[#AlreadySetCorpses] then
+									AlreadySetCorpses[#AlreadySetCorpses + 1] = corpseList[n]
+								end
+							end
+						end
+					end
 				end
-			end
-			
-			if isFreshKill == true then
-				killedEnts[#killedEnts + 1] = corpseList[c]
-				PolymersFreshSpawnPos[#PolymersFreshSpawnPos + 1] = corpseList[c]
-				AlreadySetCorpses[#AlreadySetCorpses + 1] = corpseList[c]
+				
+			elseif #corpseList == 1 then	--If larger than 2 then it is a jumping headcrab still alive!	
+				if corpse:GetClassname() == "prop_ragdoll" then	
+					killedEnts[#killedEnts + 1] = corpse
+					AlreadySetCorpses[#AlreadySetCorpses + 1] = corpse
+					npc.isAlive = false
+				end
 			end
 		end
 	end
@@ -366,46 +408,20 @@ function _G.Event_PolymerPickedUp(eventInfo)
 end
 
 -- Polymer Economy function
-function _G.DoPolymerEconomy()
-	--check which polymers are new
-	if UpdatePolymers == true then
-		local isSet = false
-		local allPolymers = Entities:FindAllByClassname("item_hlvr_crafting_currency_small")
-		
-		for i = 1, #allPolymers, 1 do
-			isSet = false
-			for j = 1, #AlreadySetPolymers, 1 do
-				if allPolymers[i] == AlreadySetPolymers[j] then
-					isSet = true
-				end
-			end
-			
-			--move old polymers which got spawned last tick to the right position
-			if isSet == false then
-				if #PolymersFreshSpawnPos == 0 then
-					if DebugEnabled == true then
-						ModDebug("Found new Polymer but no corpse to spawn it at!")
-					end
-				else
-					allPolymers[i]:SetOrigin(PolymersFreshSpawnPos[#PolymersFreshSpawnPos]:GetAbsOrigin())
-					AlreadySetPolymers[#AlreadySetPolymers + 1] = allPolymers[i]
-					table.remove(PolymersFreshSpawnPos, #PolymersFreshSpawnPos)
-				end
-			end
-		end
-		UpdatePolymers = false
-	end
-
+function _G.DoPolymerEconomy(deadEnt)
 	--add new polymers
-	local killedEnts = GetRecentKills()
-	if #killedEnts > 0 then
-		--for i, deadEnt in ipairs(killedEnts) do
-		if math.random() < PolymerDropChance then
-			SendToConsole("ent_create item_hlvr_crafting_currency_small")
-			UpdatePolymers = true
-		end
-		--end
+	--local killedEnts = GetRecentKills()
+	--if #killedEnts > 0 then
+	local myOrigin = ""
+	--	for i, deadEnt in ipairs(killedEnts) do
+			print (deadEnt:GetName())
+	if math.random() < PolymerDropChance then
+		myOrigin = tostring(deadEnt:GetOrigin().x).." "..tostring(deadEnt:GetOrigin().y).." "..tostring(deadEnt:GetOrigin().z + 5)
+		CommandStack.Add("ent_create item_hlvr_crafting_currency_small {\"origin\" \""..myOrigin.."\"}")
+		--UpdatePolymers = true
 	end
+	--	end
+	--end
 end
 
 -- Manages a buy request from a shop
@@ -427,11 +443,13 @@ function _G.UseVender(vendername)
 	if Vender[venderIndex].InUse == false then
 		if MyPolymer >= Vender[venderIndex].Price then
 			CommandStack.Add("hlvr_addresources 0 0 0 -"..tostring(Vender[venderIndex].Price))
+			local myOrigin = tostring(Vender[venderIndex].Entity:GetOrigin().x).." "..tostring(Vender[venderIndex].Entity:GetOrigin().y).." "..tostring(Vender[venderIndex].Entity:GetOrigin().z)
 			
 			if Vender[venderIndex].Prototype == "" then
-				CommandStack.Add("ent_create "..Vender[venderIndex].Item)
-				Vender[venderIndex].InUse = true
+				CommandStack.Add("ent_create "..Vender[venderIndex].Item.." {\"origin\" \""..myOrigin.."\"}")
+				--Vender[venderIndex].InUse = true
 			else
+				-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIX PROTOTYPES
 				local prototype = Entities:FindByName(Entities:First(), Vender[venderIndex].Prototype)
 				local protoSpawn = SpawnEntityFromTableSynchronous(Vender[venderIndex].Item, prototype)
 				protoSpawn:SetOrigin(Vender[venderIndex].Entity:GetOrigin())
@@ -559,46 +577,6 @@ function _G.SetWavetimer (t)
 	end
 end
 
--- Doing the Polymer eco for weapon upgrades
--- function _G.WeaponUpgraded(weapon, upgradeType)
-	-- if weapon == "pistol" then
-		-- if upgradeType == "sight" then
-		
-		-- elseif upgradeType == "burst" then
-		
-		-- end
-	-- elseif weapon == "shotgun" then
-		-- if upgradeType == "double" then
-		
-		-- elseif upgradeType == "grenade" then
-		
-		-- end
-	-- elseif weapon == "rapidfire" then
-	
-	-- end
--- end
-
--- Triggered when the player uses the crafting station
--- function _G.Event_UpgradePistol_Lasersight(eventInfo)
-	-- WeaponUpgraded("pistol", "sight")
--- end
-
--- function _G.Event_UpgradePistol_Burstfire(eventInfo)
-	-- WeaponUpgraded("pistol", "burst")
--- end
-
--- A FEW UPGRADES MIGHT CAUSE BUGS AS WE DON'T HAVE THE GAME EVENTS FOR IT
-
--- function _G.Event_UpgradeShotgun_Double(eventInfo)
-	-- WeaponUpgraded("shotgun", "double")
--- end
-
--- function _G.Event_UpgradeShotgun_Grenade(eventInfo)
-	-- WeaponUpgraded("shotgun", "grenade")
--- end
-
-
-
 --=============================================================================
 
 --Gegner werden manchmal nicht registriert/positioniert? Also eine ganze welle steckt manchmal dort fest wo der spieler hinschaut
@@ -636,32 +614,6 @@ function GamemodeThink()
 					elseif UpdateStep == UPDATE_STEP_CHECK then
 					
 						if PlayerDied == false then
-							if ActivePlayer:GetHealth() <= 1.5 and PlayerDied == false then
-							
-								local teleportTo = Entities:FindByName(Entities:First(), "PlayerMenu")
-								if teleportTo == nil then
-									ModDebug("[ERROR] Failed to find PlayerMenu teleport location! Cant kill player. CRASH")
-									return
-								end
-								
-								ActivePlayer:SetOrigin(teleportTo:GetOrigin())
-								ActivePlayer:SetAbsOrigin(teleportTo:GetAbsOrigin())
-								local posString = "setpos "..tostring(math.floor(teleportTo:GetAbsOrigin().x)).." "..tostring(math.floor(teleportTo:GetAbsOrigin().y)).." "..tostring(math.floor(teleportTo:GetAbsOrigin().z))
-								
-								PlayerDied = true
-								
-								--Remove headcrab for the case on is on players face
-								local aliveCrabs = Entities:FindAllByClassname("npc_headcrab")
-								for i, crab in ipairs(aliveCrabs) do
-									CommandStack.Add("ent_remove "..tostring(crab:entindex()))
-								end
-								
-								posString = "0300"..posString
-								CommandStack.Add(posString, COMMAND_DELAYEDCONSOLE)
-								
-								CommandStack.Add("hlvr_heartbeat_enable 0")
-							end
-						
 							if IsWaveAlive() == false and WaveIsDead == false then
 								DelayStart(WaveDelay)										--Delay needed to avoid immortal headcrab
 								WaveIsDead = true
@@ -691,20 +643,16 @@ function GamemodeThink()
 						else
 							if PortedPlayerToMenu == false then
 								ModDebug("Finished game with a score of "..tostring(ScoreTotal).." in "..tostring(TotalWavesPlayed).." Waves")
-								local teleportTo = Entities:FindByName(Entities:First(), "PlayerMenu")
-								
-								if 		(math.abs(ActivePlayer:GetOrigin().x) - math.abs(teleportTo:GetAbsOrigin().x)) > 3 
-									or	(math.abs(ActivePlayer:GetOrigin().y) - math.abs(teleportTo:GetAbsOrigin().y)) > 3
-									or	(math.abs(ActivePlayer:GetOrigin().z) - math.abs(teleportTo:GetAbsOrigin().z)) > 3 then
-									
-									CommandStack.Add("sv_cheats 1")
-									ActivePlayer:SetOrigin(teleportTo:GetOrigin())
-									ActivePlayer:SetAbsOrigin(teleportTo:GetAbsOrigin())
-									
-									local posString = "setpos "..tostring(math.floor(teleportTo:GetAbsOrigin().x)).." "..tostring(math.floor(teleportTo:GetAbsOrigin().y)).." "..tostring(math.floor(teleportTo:GetAbsOrigin().z))
-									CommandStack.Add(posString)
+								local teleportTo = Entities:FindAllByName("DeathTeleportTo")
+								--print(teleportTo[1])
+								if teleportTo[1] == nil then									
+									if DebugEnabled == true then
+										ModDebug("Waiting for Teleporter to spawn...")
+									end
 								else
 									PortedPlayerToMenu = true
+									CommandStack.Add("ent_fire deathteleportto teleport") 
+									SoftPause = true
 									if DebugEnabled == true then
 										ModDebug("Player Teleported.")
 									end
@@ -723,7 +671,7 @@ function GamemodeThink()
 							SetWaveboard()
 						end
 						
-						SpawnWave(CurrentWave)
+						SpawnWave(CurrentWave)				
 						
 						FirstWaveSpawned = true
 						
@@ -739,6 +687,7 @@ function GamemodeThink()
 						
 						if HasWaveSpawned() == true then
 							EmitSoundOn(WaveStartSound, ActivePlayer)
+							DelayStart(15)
 							
 							UpdateStep = UPDATE_STEP_CHECK
 						end
@@ -771,11 +720,63 @@ function GamemodeThink()
 			end
 		end
 		
-		UpdateVenders()
+		--UpdateVenders()
 		
-		DoPolymerEconomy()
+		--DoPolymerEconomy()
 		
 		UpdateModClock()
+		
+		--Check for death
+		if ActivePlayer:GetHealth() <= 1.5 and PlayerDied == false then
+		
+			local teleportTo = Entities:FindByName(Entities:First(), "PlayerMenu")
+			if teleportTo == nil then
+				ModDebug("[ERROR] Failed to find PlayerMenu teleport location! Cant kill player. CRASH")
+				return
+			end
+			
+			CommandStack.Add("ent_create point_teleport"..
+							 " {\"origin\" \""..tostring(teleportTo:GetOrigin().x).." "..tostring(teleportTo:GetOrigin().y).." "..tostring(teleportTo:GetOrigin().z+2).."\""..
+							 " \"scales\" \"1 1 1\""..
+							 " \"angles\" \"0 0 0\""..
+							 " \"\"spawnflags#2\"\" \"1\""..
+							 " \"\"spawnflags#1\"\" \"0\""..
+							 " \"\"spawnflags#0\"\" \"0\""..
+							 " \"target\" \"!player\""..
+							 " \"teleport_parented_entities\" \"1\""..
+							 " \"targetname\" \"DeathTeleportTo\"}")
+							 
+			
+			PlayerDied = true
+			
+			--Remove headcrab for the case on is on players face
+			local aliveCrabs = Entities:FindAllByClassname("npc_headcrab")
+			for i, crab in ipairs(aliveCrabs) do
+				CommandStack.Add("ent_remove "..tostring(crab:entindex()))
+			end
+			
+			CommandStack.Add("hlvr_heartbeat_enable 0")
+		end
+		
+		-- Process teleport on death
+		if PlayerDied == true then
+			if PortedPlayerToMenu == false then
+				ModDebug("Finished game with a score of "..tostring(ScoreTotal).." in "..tostring(TotalWavesPlayed).." Waves")
+				local teleportTo = Entities:FindAllByName("DeathTeleportTo")
+				if teleportTo[1] == nil then									
+					if DebugEnabled == true then
+						ModDebug("Waiting for Teleporter to spawn...")
+					end
+				else
+					PortedPlayerToMenu = true
+					CommandStack.Add("ent_fire deathteleportto teleport") 
+					SoftPause = true
+					if DebugEnabled == true then
+						ModDebug("Player Teleported.")
+					end
+				end
+			end
+		end
 		
 		if EnablePerformanceMode == true then
 			return FrameTime()*16
